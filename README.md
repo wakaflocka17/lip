@@ -4,8 +4,9 @@
 
 ## Esercizio 2
 
-questo è **bold**
+This is **bold**
 
-```
-let foo x = x +1
+```ocaml
+let rec foo x = if x=0 then x 
+                else foo (x+1)
 ```
