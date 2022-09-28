@@ -1,4 +1,4 @@
-### Exercise #2: from type to function
+# From type to function #1
 
 Implement any function with the following type:
 ```ocaml
