@@ -7,6 +7,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 - [Absolute value](ocaml-basics/absolute-value/)
 - [From type to function #1](ocaml-basics/fun-of-type-1/)
 - [Find a function #1](ocaml-basics/find-fun-1/)
+- [Minimum of a function](ocaml-basics/minfun)
 - [Student grades](ocaml-basics/cumlaude)
 
 
