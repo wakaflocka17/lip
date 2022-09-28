@@ -1,4 +1,4 @@
-# Reverse of a list
+# Reverse a list
 
 Write a function to reverse the the elements of a list, with the following type:
 ```ocaml
