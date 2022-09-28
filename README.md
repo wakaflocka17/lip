@@ -1,6 +1,6 @@
 # LiP Lab
 
-## Ocaml crash course #1
+## Ocaml basics #1
 
 You can work on these exercises using the online Ocaml playground: [Try Ocaml](https://try.ocamlpro.com/).
 
@@ -11,7 +11,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 - [Student grades](ocaml-basics/cumlaude)
 
 
-## Ocaml crash course #2
+## Ocaml basics #2
 
 *TBA*
 
