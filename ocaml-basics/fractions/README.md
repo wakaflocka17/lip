@@ -27,3 +27,5 @@ Finally, write a function:
 val compare_frac : int * int -> int * int -> int = <fun>
 ```
 which compares two fractions (not necessarily positive).
+
+**Warning**: it is strictly forbidden to convert the fractions to floats!
