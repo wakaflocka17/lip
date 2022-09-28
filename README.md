@@ -4,6 +4,7 @@
 
 You can work on these exercises using the online Ocaml playground: [Try Ocaml](https://try.ocamlpro.com/).
 
+1. [Max of two numbers](ocaml-basics/max-of-two/)
 1. [Absolute value](ocaml-basics/absolute-value/)
 1. [From type to function #1](ocaml-basics/fun-of-type-1/)
 1. [Find a function #1](ocaml-basics/find-fun-1/)
