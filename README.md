@@ -22,7 +22,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 
 ## Ocaml basics #2
 
-*TBA*
+1. [Alternating-even numbers](ocaml-basics/alt-even)
 
 ## References
 
