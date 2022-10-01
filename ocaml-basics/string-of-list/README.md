@@ -19,6 +19,7 @@ For instance, we must obtain:
 - : string = "[]"
 
 # string_of_list [1];;
+- : string = "[1]"
 
 # string_of_list [1;2;3];;
 - : string = "[1;2;3]"
