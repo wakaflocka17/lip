@@ -25,6 +25,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 1. [Alternating-even numbers](ocaml-basics/alt-even)
 1. [From list to string](ocaml-basics/string-of-list)
 1. [Min and max of function](ocaml-basics/minmax)
+1. [Binary search trees](ocaml-basics/binary-search-trees)
 
 ## References
 
