@@ -23,6 +23,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 ## Ocaml basics #2
 
 1. [Alternating-even numbers](ocaml-basics/alt-even)
+1. [From list to string](ocaml-basics/string-of-list)
 
 ## References
 
