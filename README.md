@@ -29,6 +29,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 1. [Binary search trees](ocaml-basics/binary-search-tree)
 1. [Deck of cards](ocaml-basics/deck-of-cards)
 1. [List crush](ocaml-basics/list-crush)
+1. [Longest subsequence](ocaml-basics/longsub)
 1. [Ping pong](ocaml-basics/ping-pong)
 
 ## References
