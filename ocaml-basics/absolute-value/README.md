@@ -1,4 +1,4 @@
-### Absolute value
+# Absolute value
 
 Implement a function with the following type:
 ```ocaml
