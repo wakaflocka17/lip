@@ -11,8 +11,8 @@ let l3 = [1;3;2;4;3;5];;
 Here, l0, l2 and l3 are alternating, while l1 is not.
 
 A list of integers is **ping pong** if there is some central element
-(the "net") around which the others alternate.
-For instance, the list l0 above is ping pong, while the others are not.
+(the "net") around which the others alternate, without touching the net.
+For instance, the list l0 above is ping pong (with net 3 or 4), while the others are not.
 In particular,
 l1 is not alternating;
 in l2, the net should be between 2 and 3,
