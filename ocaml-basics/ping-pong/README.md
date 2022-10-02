@@ -1,6 +1,7 @@
 # Ping pong
 
-A list of integers is **alternating** if for each sublist [a;b;c] of three elements, the ordering relation between a and b is the inverse of the one between b and c.
+A list of integers is **alternating** if for each sublist [a;b;c] of three elements, the ordering relation between a and b is the inverse of the one between b and c, and two consecutive elements cannot be equal.
+
 For instance consider the following lists:
 ```ocaml
 let l0 = [1;5;2;5;1;6];;
@@ -12,6 +13,7 @@ Here, l0, l2 and l3 are alternating, while l1 is not.
 
 A list of integers is **ping pong** if there is some central element
 (the "net") around which the others alternate, without touching the net.
+
 For instance, the list l0 above is ping pong (with net 3 or 4), while the others are not.
 In particular,
 l1 is not alternating;
