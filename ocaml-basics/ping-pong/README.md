@@ -1,13 +1,15 @@
 # Ping pong
 
-A list of integers is **alternating** if for each sublist [a;b;c] of three elements, the ordering relation between a and b is the inverse of the one between b and c, and two consecutive elements cannot be equal.
+A list of elements is **alternating** if:
+- two consecutive elements are not equal;
+- for each sublist [a;b;c] of three elements, the ordering relation between a and b is the inverse of the one between b and c.
 
 For instance consider the following lists:
 ```ocaml
 let l0 = [1;5;2;5;1;6];;
 let l1 = [1;5;2;5;4;3];;
 let l2 = [1;5;2;3;2;4];;
-let l3 = [1;3;2;4;3;5];;
+let l3 = [3;1;4;2;5;3];;
 ```
 Here, l0, l2 and l3 are alternating, while l1 is not.
 
@@ -24,6 +26,6 @@ in l3, the net is shifting towards the right: it is 2 at the first step,
 
 Write functions to detect if a list is alternating and ping pong, with the following types:
 ```ocaml
-val alternating : int list -> bool = <fun>
+val alt : 'a list -> bool = <fun>
 val ping_pong : int list -> bool = <fun>
 ```
