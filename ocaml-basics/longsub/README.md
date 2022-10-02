@@ -4,9 +4,9 @@ Write a function with the following type:
 ```ocaml
 val longsub : 'a list -> ('a * int) option = <fun>
 ```
-such that ``longsub l`` evaluates to None if the list l is empty,
-otherwise evaluates to the pair Some(x,n) if the longest subsequence
-of equal elements has length n, and contains the element x.
+such that ``longsub l`` evaluates to `None` if the list l is empty,
+otherwise it evaluates to the pair `Some(x,n)` if the longest subsequence
+of equal elements in l has length n, and contains the element x.
 
 For example:
 ```ocaml
