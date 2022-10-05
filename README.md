@@ -22,6 +22,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 
 ## Ocaml basics #2
 
+1. [Duplicates](ocaml-basics/dup)
 1. [From list to string](ocaml-basics/string-of-list)
 1. [Min and max of a function](ocaml-basics/minmax)
 1. [Extract an element from a list](ocaml-basics/extract)
