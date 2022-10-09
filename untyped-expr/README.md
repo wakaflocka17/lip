@@ -9,5 +9,9 @@ opam init --bare -a -y
 ```
 
 ```bash
+opam switch create lip ocaml-base-compiler.4.14.0
+```
+
+```bash
 opam install -y utop menhir
 ```
