@@ -1,5 +1,9 @@
 # Untyped arithmetic expressions
 
 ```bash
-apt install opam
+sudo apt install opam
+```
+
+```bash
+opam init --bare -a -y
 ```
