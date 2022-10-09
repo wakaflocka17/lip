@@ -11,7 +11,6 @@ rule read =
   | "false" { FALSE }
   | "(" { LPAREN }
   | ")" { RPAREN }
-  | "or" { OR }  
   | "if" { IF }
   | "then" { THEN }
   | "else" { ELSE }
