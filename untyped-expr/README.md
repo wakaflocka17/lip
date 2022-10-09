@@ -35,3 +35,8 @@ opam install -y utop menhir
 ```bash
 dune init proj boolexp
 ```
+
+At the end of the file dune-project, add the following line:
+```bash
+(using menhir 2.1)
+```
