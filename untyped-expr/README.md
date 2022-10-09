@@ -27,7 +27,7 @@ opam switch list
 ```
 
 ```bash
-opam install -y utop menhir
+opam install -y utop menhir merlin
 ```
 
 ## Project setup
