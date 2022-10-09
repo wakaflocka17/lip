@@ -37,7 +37,7 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 
 ## Untyped arithmetic expressions
 
-1. [Project setup](untyped-expr/install)
+1. [Project setup](untyped-expr/)
 
 ## References
 
