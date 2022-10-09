@@ -40,3 +40,7 @@ At the end of the file dune-project, add the following line:
 ```bash
 (using menhir 2.1)
 ```
+
+```bash
+dune utop src
+```
