@@ -1,5 +1,8 @@
 # Untyped arithmetic expressions
 
+
+## Opam installation
+
 Full instructions here: [opam installation](https://cs3110.github.io/textbook/chapters/preface/install.html)
 
 ```bash
@@ -25,4 +28,10 @@ opam switch list
 
 ```bash
 opam install -y utop menhir
+```
+
+## Project setup
+
+```bash
+dune init proj boolexp
 ```
