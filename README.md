@@ -35,6 +35,10 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 1. [Longest subsequence](ocaml-basics/longsub)
 1. [Ping pong](ocaml-basics/ping-pong)
 
+## Untyped arithmetic expressions
+
+1. [Project setup](untyped-expr/install)
+
 ## References
 
 - [OCaml Programming: Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/cover.html)
