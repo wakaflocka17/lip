@@ -42,5 +42,9 @@ At the end of the file dune-project, add the following line:
 ```
 
 ```bash
+dune build
+```
+
+```bash
 dune utop src
 ```
