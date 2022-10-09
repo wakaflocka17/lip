@@ -33,7 +33,7 @@ opam install -y utop menhir merlin
 ## Project setup
 
 ```bash
-dune init proj boolexp
+dune init proj boolexpr
 ```
 
 At the end of the file dune-project, add the following line:
