@@ -1,5 +1,7 @@
 # Untyped arithmetic expressions
 
+Full instructions here: [opam installation](https://cs3110.github.io/textbook/chapters/preface/install.html)
+
 ```bash
 sudo apt install opam
 ```
