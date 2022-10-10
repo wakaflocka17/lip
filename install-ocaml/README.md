@@ -1,4 +1,4 @@
-# Installing OCaml & project setup
+# Installing OCaml
 
 This file contains minimal instructions to setup a local installation of OCaml un Linux.
 See [here](https://ocaml.org/docs/up-and-running) for detailed instructions here.
