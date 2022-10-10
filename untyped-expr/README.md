@@ -1,26 +1,6 @@
 # Untyped arithmetic expressions
 
 
-## Opam installation
-
-Full instructions here: [opam installation](https://cs3110.github.io/textbook/chapters/preface/install.html)
-
-```bash
-sudo apt install opam
-```
-
-```bash
-opam init --bare -a -y
-```
-
-```bash
-eval $(opam env)
-```
-
-```bash
-opam install -y dune merlin ocaml-lsp-server odoc ocamlformat utop menhir 
-```
-
 ## Project setup
 
 ```bash
