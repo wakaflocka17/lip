@@ -27,7 +27,7 @@ opam switch list
 ```
 
 ```bash
-opam install -y utop menhir merlin
+opam install -y dune merlin ocaml-lsp-server odoc ocamlformat utop menhir 
 ```
 
 ## Project setup
