@@ -167,12 +167,17 @@ open Parser
 
 ### Identifiers
 
+This section defines named regular expressions, to be used later in the rules section.
+Here, we define an indentifier `white`, to denote sequences of one or more whitespaces (spaces and tabs):
 ```ocaml
 let white = [' ' '\t']+
 ```
 
 ### Rules
 
+This section defines rules that associate tokens to their string representations.
+The lexer tries to match regular expressions in the order they are listed (similarly to the `match` construct).
+When it finds a match, it ouputs the token specified in the curly brackets:
 ```ocaml
 rule read =
   parse
@@ -186,6 +191,9 @@ rule read =
   | "else" { ELSE }
   | eof { EOF }
 ```
+Most of the lines are straightforward. 
+The first line means that if the regular expression names `white` is matched, the lexer should just skips it, without producing a token.
+The last line matches the `eof` regular expression, i.e. the end of the file or string being lexed.
 
 ## The driver
 
