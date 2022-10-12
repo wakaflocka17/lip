@@ -25,7 +25,24 @@ eval e0 = false
 eval If(e0,e1,e2) = eval e2
 ```
 
-## Project initialization
+## Project setup
+
+```bash
+dune init proj boolexpr
+```
+
+At the end of the file dune-project, add the following line:
+```bash
+(using menhir 2.1)
+```
+
+```bash
+dune build
+```
+
+```bash
+dune utop src
+```
 
 ## Lexer and parser
 
