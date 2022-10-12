@@ -132,10 +132,25 @@ rule read =
 
 ## Testing the parser
 
+We can test the parser within the utop REPL, which can be accessed through the command:
 ```bash
 dune utop src
 ```
+From within utop, we can execute OCaml code. First, it is useful to open our library:
+```ocaml
+open BoolexprLib.Main;;
+```
+At this point, we can execute the functions of our library.
+For instance, we can test the parser by applying the `parse` function:
+```ocaml
+parse "true";;
+- : BoolexprLib.Ast.boolExpr = BoolexprLib.Ast.True
 
+parse "if true then false else true";;
+- : BoolexprLib.Ast.boolExpr =
+BoolexprLib.Ast.If (BoolexprLib.Ast.True, BoolexprLib.Ast.False,
+ BoolexprLib.Ast.True)
+```
 
 ## Big-step semantics
 
@@ -145,4 +160,11 @@ let rec eval = function
   | False -> false
   | If(e0,e1,e2) -> if eval e0 then eval e1 else eval e2
 ;;
+```
+
+## Testing the semantics
+
+```bash
+dune utop src
+BoolexprLib.Main.eval
 ```
