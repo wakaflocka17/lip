@@ -29,7 +29,5 @@ let rec trace e = try
 let rec eval = function
     True -> true
   | False -> false
-  | If(e0,e1,e2) -> (match eval e0 with
-                      true -> eval e1
-                    | false -> eval e2)
+  | If(e0,e1,e2) -> if eval e0 then eval e1 else eval e2
 ;;
