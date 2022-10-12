@@ -286,7 +286,7 @@ The small-step semantics of our language is defined by the following inference r
 If(True,e1,e2) = e1
 
 -------------------- [S-IfFalse]
-If(False,e1,e2) = e1
+If(False,e1,e2) = e2
 
 e0 ---> e0'
 ----------------------------- [S-If]
