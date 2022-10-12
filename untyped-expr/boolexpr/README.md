@@ -327,9 +327,10 @@ parse "if (if true then false else true) then true else false" |> trace;;
 
 ## Frontend & testing
 
-To simplify debugging, the file [main.ml](bin/main.ml) under `bin` includes a frontend which allow users to run the functions `eval` and `trace` by command line,
+To simplify debugging, the project includes a frontend which allow users to run the functions `eval` and `trace` by command line,
 providing the input via stdin or file.
-For instance:
+Before proceeding, copy the files [main.ml](bin/main.ml) and [dune](bin/dune) into your working directory, under `boolexpr/bin`.
+Then, execute:
 ```bash
 dune exec boolexpr
 if (if true then false else true) then true else (if false then true else false)
