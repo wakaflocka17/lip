@@ -1,4 +1,4 @@
 (executable
  (public_name boolexpr)
  (name main)
- (libraries interp))
+ (libraries boolexprLib))
