@@ -151,6 +151,7 @@ The last production parses an expression surrounded by parentheses.
 
 ## Lexer
 
+The file `lexer.mll` contains the ocamllex code needed to generate the lexer.
 ```ocaml
 {
 open Parser
