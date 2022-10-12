@@ -81,7 +81,7 @@ The file `parser.mly` contains the grammar definition of our language.
 Menhir will process this file and produce the actual parser in OCaml 
 (this will be located in `_build/default/src/parser.ml`).
 
-The  grammar definition is split into four sections: header, declarations, rules, and trailer.
+The  grammar definition is split into four sections: header, declarations, rules, and trailer (the last one is not needed in our language).
 We discuss below these sections.
 
 ### Header
@@ -108,22 +108,35 @@ The declarations define the lexical tokens of our language:
 %token THEN
 %token ELSE
 %token EOF
+
+%start <boolExpr> prog
+%%
 ```
 Note that these tokens are just names, and they are not yet linked to their concrete string representations.
 For instance, there is nothing that says that `LPAREN` and `RPAREN` correspond, respectively, to ( and ).
 The lexer will associate token names to their string representations.
 
+The last declaration:
+```ocaml
+%start <boolExpr> prog
+```
+says that parsing starts with rule named `prog` (defined below), and that the result of the parsing will be an OCaml value of type `Ast.boolExpr`.
+
 ### Rules 
 
-%start <Ast.boolExpr> prog
-
-%%
-
+The rules section defines the productions of the grammar.
+The start symbol is `prog`, with has the following production:
 ```ocaml
 prog:
   | e = expr; EOF { e }
 ;
+```
+This says that a `prog` is an `expr` followed by the token `EOF` (which stands for "end of file"). 
+The part `e = expr` binds the value obtained by parsing `expr` to the identifier `e`. 
+The final part `{ e }` means that the production returns the value associated to `e`.
 
+The rule `expr` defines four productions:
+```ocaml
 expr:
   | TRUE { True }
   | FALSE { False }
@@ -131,6 +144,10 @@ expr:
   | LPAREN; e=expr; RPAREN {e}
 ;
 ```
+The first two productions associate the tokens `TRUE` and `FALSE` to the values `True` and `False` of our type `boolExpr`.
+The third production parses the IF-THEN-ELSE construct.
+The last production parses an expression surrounded by parentheses.
+
 
 ## Lexer
 
