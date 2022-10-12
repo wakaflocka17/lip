@@ -325,3 +325,31 @@ parse "if (if true then false else true) then true else false" |> trace;;
  If (False, True, False);
  False]
 ```
+
+## Frontend & testing
+
+To simplify debugging, the file `bin/main.ml` includes a frontend which allow users to run the functions `eval` and `trace` by command line,
+by providing the input via stdin or via file.
+For instance:
+```bash
+dune exec boolexpr
+if (if true then false else true) then true else (if false then true else false)
+false
+```
+The frontend also features a pretty-printer for the `trace` command.
+For instance:
+```bash
+dune exec boolexpr trace 
+if (if true then false else true) then true else (if false then true else false)
+If(If(True,False,True),True,If(False,True,False))
+ -> If(False,True,If(False,True,False))
+ -> If(False,True,False)
+ -> False
+```
+
+Finally, the `test` folder contains some automated tests, which can be run via the command:
+```bash
+dune test
+```
+If no output is produced, then all tests have passed.
+Further information for writing tests can be found on the [dune manual](https://dune.readthedocs.io/en/stable/tests.html).
