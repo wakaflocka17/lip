@@ -334,14 +334,20 @@ Before proceeding, copy the files [main.ml](bin/main.ml) and [dune](bin/dune) in
 Then, execute:
 ```bash
 dune exec boolexpr
-if (if true then false else true) then true else (if false then true else false)
-false
 ```
-The frontend also features a pretty-printer for the `trace` command.
-For instance:
+This command reads a string from stdin, and evaluates it with the big-step semantics.
+For instance, if we enter:
+```
+if (if true then false else true) then true else (if false then true else false)
+```
+then the result of the evaluation will be `false`.
+
+The frontend also features a pretty-printer for the `trace` command:
 ```bash
 dune exec boolexpr trace 
-if (if true then false else true) then true else (if false then true else false)
+```
+For instance, if we enter the same string as before, we obtain as output:
+```ocaml
 If(If(True,False,True),True,If(False,True,False))
  -> If(False,True,If(False,True,False))
  -> If(False,True,False)
