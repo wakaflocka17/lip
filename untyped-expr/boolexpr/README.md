@@ -68,9 +68,9 @@ At the end of this tutorial, the `boolexpr/src` directory will have the followin
 src/
 ├── ast.ml         # Abstract syntax tree
 ├── dune           # Dune library definition
-├── lexer.mll      # Ocamllex lexer
+├── lexer.mll      # Ocamllex lexer definition
 ├── main.ml        # Language semantics and utility functions
-├── parser.mly     # Menhir parser
+├── parser.mly     # Menhir parser definition
 ```
 We will discuss these files in the following sections. You can find them in the [src folder](src) of this repository.
 
