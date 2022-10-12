@@ -25,7 +25,7 @@ We give some hints below.
 ## Lexer
 
 To extend the lexer, you can define identifiers as non-empty sequences of letters, as follows:
-```
+```ocaml
 let letter = ['a'-'z' 'A'-'Z']
 let id = letter+
 
