@@ -1,6 +1,6 @@
 # A minimal language for boolean expressions
 
-This is a step-by-step guide to create an interpreter for a small language of boolean expressions, with the following abstract syntax:
+This is a step-by-step guide to create an interpreter for a small language of boolean expressions, with the following [abstract syntax](src/ast.ml):
 ```ocaml
 type boolExpr =
     True
@@ -77,7 +77,7 @@ We will discuss these files in the following sections. You can find them in the 
 
 ## Parser
 
-The file `parser.mly` contains the grammar definition of our language.
+The file [parser.mly](src/parser.mly) contains the grammar definition of our language.
 Menhir will process this file and produce the actual parser in OCaml 
 (this will be located in `_build/default/src/parser.ml`).
 
@@ -151,7 +151,7 @@ The last production parses an expression surrounded by parentheses.
 
 ## Lexer
 
-The file `lexer.mll` contains the code needed to generate the lexer.
+The file [lexer.mll](src/lexer.mll) contains the code needed to generate the lexer.
 Ocamllex will process this file and produce the actual lexer in OCaml (this will be located in `_build/default/src/lexer.ml`).
 
 The lexer definition is split into four sections: header, identifiers, rules, and trailer (the last section is not needed for our language).
@@ -197,8 +197,7 @@ The last line matches the `eof` regular expression, i.e. the end of the file or 
 
 ## Generating the library
 
-In order to use the lexer and parser from OCaml, we write in `src/main.ml` a small driver function to translate a string into an AST:
-In `src/main.ml`:
+In order to use the lexer and parser from OCaml, we write in [main.ml](src/main.ml) a small driver function to translate a string into an AST:
 ```ocaml
 open Ast
 
@@ -260,7 +259,7 @@ Exception: BoolexprLib.Parser.MenhirBasics.Error.
 We now implement the big-step semantics of our language.
 This is a simple recursive function, that evaluates the expression `True` to the boolean value `true`,
 `False` to `false`, and call itself recursively to evaluate if-then-else expressions.
-We add this function to `src/main.ml`:
+We add this function to [main.ml](src/main.ml):
 ```ocaml
 let rec eval = function
     True -> true
