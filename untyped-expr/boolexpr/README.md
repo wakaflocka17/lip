@@ -63,7 +63,7 @@ Now, create a directory `src` under `boolexpr`:
 ```bash
 mkdir src
 ```
-The `boolexpr/src` directory will have the following structure:
+At the end of this tutorial, the `boolexpr/src` directory will have the following structure:
 ```
 src/
 ├── ast.ml         # Abstract syntax tree
@@ -72,7 +72,7 @@ src/
 ├── main.ml        # Language semantics and utility functions
 ├── parser.mly     # Menhir parser
 ```
-We will discuss these files in the following sections.
+We will discuss these files in the following sections. You can find them in the [src folder](src) of this repository.
 
 
 ## Parser
