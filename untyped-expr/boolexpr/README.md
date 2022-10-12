@@ -306,3 +306,22 @@ let rec trace1 = function
 ;;
 ```
 Note that in case no rule can be applied, we raise an exception.
+
+We then implement the transitive closure of the transition relation `trace1`, by applying it recursively until an exception is raised. 
+Actually, rather than producing the resulting non-reducible expression, the function `trace` defined below
+produces the whole execution trace, in the form of a sequence of boolean expressions:
+```ocaml
+let rec trace e = try
+    let e' = trace1 e
+    in e::(trace e')
+  with NoRuleApplies -> [e]
+;;
+```
+We can test this function via utop (we remove `BoolexprLib.Ast` from the output for readability):
+```ocaml
+parse "if (if true then false else true) then true else false" |> trace;;
+- : Ast.boolExpr list =
+[If (If (True, False, True), True, False);
+ If (False, True, False);
+ False]
+```
