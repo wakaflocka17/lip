@@ -48,6 +48,7 @@ boolexpr/
 
 To check that the OCaml installation was successful, try to execute the project:
 ```bash
+cd boolexpr
 dune exec boolexpr
 ```
 If everything is fine, the output will be:
