@@ -151,14 +151,29 @@ The last production parses an expression surrounded by parentheses.
 
 ## Lexer
 
-The file `lexer.mll` contains the ocamllex code needed to generate the lexer.
+The file `lexer.mll` contains the code needed to generate the lexer.
+Ocamllex will process this file and produce the actual lexer in OCaml (this will be located in `_build/default/src/lexer.ml`).
+
+The lexer definition is split into four sections: header, identifiers, rules, and trailer (the last section is not needed for our language).
+
+### Header
+
+In the header we open the `Parser` module, in order to use the token definitions in that module without pre-pending `Parser`:
 ```ocaml
 {
 open Parser
 }
+```
 
+### Identifiers
+
+```ocaml
 let white = [' ' '\t']+
+```
 
+### Rules
+
+```ocaml
 rule read =
   parse
   | white { read lexbuf }  
