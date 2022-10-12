@@ -329,7 +329,7 @@ parse "if (if true then false else true) then true else false" |> trace;;
 ## Frontend & testing
 
 To simplify debugging, the file `bin/main.ml` includes a frontend which allow users to run the functions `eval` and `trace` by command line,
-by providing the input via stdin or via file.
+providing the input via stdin or file.
 For instance:
 ```bash
 dune exec boolexpr
