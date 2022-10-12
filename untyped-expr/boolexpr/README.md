@@ -10,18 +10,18 @@ type boolExpr =
 ```
 and with the following big-step semantics:
 ```ocaml
------------------- [E-True]
+------------------ [B-True]
 eval True = true
 
------------------- [E-False]
+------------------ [B-False]
 eval False = false
 
 eval e0 = true
---------------------------- [E-IfTrue]
+--------------------------- [B-IfTrue]
 eval If(e0,e1,e2) = eval e1
 
 eval e0 = false
---------------------------- [E-IfFalse]
+--------------------------- [B-IfFalse]
 eval If(e0,e1,e2) = eval e2
 ```
 
@@ -63,7 +63,7 @@ Now, create a directory `src` under `boolexpr`:
 ```bash
 mkdir src
 ```
-The `src` directory will have the following structure:
+The `boolexpr/src` directory will have the following structure:
 ```
 src/
 ├── ast.ml         # Abstract syntax tree
@@ -234,12 +234,11 @@ We can test the parser within the utop REPL, which can be accessed through the c
 ```bash
 dune utop src
 ```
-From within utop, we can execute OCaml code. First, it is useful to open our library:
+From utop, we can execute OCaml code. First, it is useful to open our library, so to avoid to prepend `BoolexprLib.Main` everytime we use a function:
 ```ocaml
 open BoolexprLib.Main;;
 ```
-At this point, we can execute the functions of our library.
-For instance, we can test the parser by applying the `parse` function:
+We can now test the parser by applying the `parse` function:
 ```ocaml
 parse "true";;
 - : BoolexprLib.Ast.boolExpr = BoolexprLib.Ast.True
@@ -249,20 +248,61 @@ parse "if true then false else true";;
 BoolexprLib.Ast.If (BoolexprLib.Ast.True, BoolexprLib.Ast.False,
  BoolexprLib.Ast.True)
 ```
+Note that the parser will fail to parse strings which do not correspond to syntactically correct boolean expressions.
+In these cases, the parser will raise an exception, without providing details about what caused the error:
+```ocaml
+parse "if true then false";;
+Exception: BoolexprLib.Parser.MenhirBasics.Error.
+```
 
 ## Big-step semantics
 
+We now implement the big-step semantics of our language.
+This is a simple recursive function, that evaluates the expression `True` to the boolean value `true`,
+`False` to `false`, and call itself recursively to evaluate if-then-else expressions.
+We add this function to `src/main.ml`:
 ```ocaml
 let rec eval = function
     True -> true
   | False -> false
-  | If(e0,e1,e2) -> if eval e0 then eval e1 else eval e2
+  | If(e0,e1,e2) -> if eval e0 
+                    then eval e1 
+                    else eval e2
 ;;
 ```
-
-## Testing the semantics
-
-```bash
-dune utop src
-BoolexprLib.Main.eval
+We can test the semantics via `dune utop src`, as we did for the parser.
+For instance:
+```ocaml
+parse "if true then false else true" |> eval;;
+- : bool = false
 ```
+Here we have used the pipeline operator `|>` to pass the string resulting from `parse` as input to the function `eval`.
+
+## Small-step semantics
+
+The small-step semantics of our language is defined by the following inference rules:
+```ocaml
+
+-------------------- [S-IfTrue]
+If(True,e1,e2) = e1
+
+-------------------- [S-IfFalse]
+If(False,e1,e2) = e1
+
+e0 ---> e0'
+----------------------------- [S-If]
+If(e0,e1,e2) -> If(e0',e1,e2) 
+
+```
+We implement these rules in OCaml as follows:
+```ocaml
+exception NoRuleApplies
+  
+let rec trace1 = function
+    If(True,e1,_) -> e1
+  | If(False,_,e2) -> e2
+  | If(e0,e1,e2) -> let e0' = trace1 e0 in If(e0',e1,e2)
+  | _ -> raise NoRuleApplies
+;;
+```
+Note that in case no rule can be applied, we raise an exception.
