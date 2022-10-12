@@ -327,7 +327,7 @@ parse "if (if true then false else true) then true else false" |> trace;;
 
 ## Frontend & testing
 
-To simplify debugging, the file `bin/main.ml` includes a frontend which allow users to run the functions `eval` and `trace` by command line,
+To simplify debugging, the file [main.ml](bin/main.ml) under `bin` includes a frontend which allow users to run the functions `eval` and `trace` by command line,
 providing the input via stdin or file.
 For instance:
 ```bash
