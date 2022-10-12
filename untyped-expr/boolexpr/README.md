@@ -47,3 +47,11 @@ dune utop src
 ## Lexer and parser
 
 ## Big-step semantics
+
+```ocaml
+let rec eval = function
+    True -> true
+  | False -> false
+  | If(e0,e1,e2) -> if eval e0 then eval e1 else eval e2
+;;
+```
