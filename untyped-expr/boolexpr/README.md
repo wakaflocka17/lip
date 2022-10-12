@@ -210,7 +210,7 @@ This function first transforms the string in input into a stream of tokens.
 Then, is applies the lexer and the parser to transform this stream into an AST.
 
 At this point we can wrap the driver, lexer and parser into a library named `boolexprLib`.
-This is specified in the `src/dune` file:
+This is specified in the [dune](src/dune) file in `src`:
 ```ocaml
 (library
  (name boolexprLib))
@@ -220,11 +220,11 @@ This is specified in the `src/dune` file:
 
 (ocamllex lexer)
 ```
-
-If everything is correct, we can build the project without errors:
+We can now build the project, by launching the following command from the `boolexpr` directory:
 ```bash
 dune build
 ```
+If everything is correct, `dune build` runs silently without errors.
 
 
 ## Testing the parser
