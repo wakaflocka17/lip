@@ -171,6 +171,17 @@ rule read =
   | eof { EOF }
 ```
 
+## The driver
+
+In `src/main.ml`:
+```ocaml
+open Ast
+
+let parse (s : string) : boolExpr =
+  let lexbuf = Lexing.from_string s in
+  let ast = Parser.prog Lexer.read lexbuf in
+  ast
+```
 
 ## Testing the parser
 
