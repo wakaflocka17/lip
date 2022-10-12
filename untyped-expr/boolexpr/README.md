@@ -282,13 +282,13 @@ Here we have used the pipeline operator `|>` to pass the string resulting from `
 The small-step semantics of our language is defined by the following inference rules:
 ```ocaml
 
--------------------- [S-IfTrue]
-If(True,e1,e2) = e1
+--------------------- [S-IfTrue]
+If(True,e1,e2) -> e1
 
--------------------- [S-IfFalse]
-If(False,e1,e2) = e2
+--------------------- [S-IfFalse]
+If(False,e1,e2) -> e2
 
-e0 ---> e0'
+e0 -> e0'
 ----------------------------- [S-If]
 If(e0,e1,e2) -> If(e0',e1,e2) 
 
@@ -296,7 +296,7 @@ If(e0,e1,e2) -> If(e0',e1,e2)
 We implement these rules in OCaml as follows:
 ```ocaml
 exception NoRuleApplies
-  
+
 let rec trace1 = function
     If(True,e1,_) -> e1
   | If(False,_,e2) -> e2
