@@ -27,11 +27,11 @@ eval If(e0,e1,e2) => eval e2
 
 ## Project setup
 
-To start, launch the following command from your working directory:
+To start, we setup a new project named `boolexpr` by launching the following command from your working directory:
 ```bash
 dune init proj boolexpr
 ```
-The command creates the following file structure:
+This command creates a directory `boolexpr` with the following file structure:
 ```
 boolexpr/
 ├── dune-project
