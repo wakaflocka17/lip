@@ -27,22 +27,51 @@ eval If(e0,e1,e2) = eval e2
 
 ## Project setup
 
+To start, launch the following command from your working directory:
 ```bash
 dune init proj boolexpr
 ```
+The command creates the following file structure:
+```
+boolexpr/
+├── dune-project
+├── bin
+│   └── dune
+│   └── main.ml
+├── lib
+│   └── dune
+├── test
+│   ├── dune
+│   └── boolexpr.ml
+└── boolexpr.opam
+```
 
-At the end of the file dune-project, add the following line:
+To check that the OCaml installation was successful, try to execute the project:
+```bash
+dune exec boolexpr
+```
+If everything is fine, the output will be:
+```
+Hello, World! 
+```
+To instruct dune that our project will use Menhir, add the following line at the end of the file `dune-project`:
 ```bash
 (using menhir 2.1)
 ```
-
+Now, create a directory `src` under `boolexpr`:
 ```bash
-dune build
+mkdir src
 ```
-
-```bash
-dune utop src
+The `src` directory will have the following structure:
 ```
+src/
+├── ast.ml         # Abstract syntax tree
+├── dune           # Dune library definition
+├── lexer.mll      # Ocamllex lexer
+├── main.ml        # Language semantics and utility functions
+├── parser.mly     # Menhir parser
+```
+We will discuss these files in the following sections.
 
 ## Lexer and parser
 
@@ -74,6 +103,12 @@ expr:
   | IF; e1 = expr; THEN; e2 = expr; ELSE; e3 = expr; { If(e1, e2, e3) }
   | LPAREN; e=expr; RPAREN {e}
 ;
+```
+
+## Testing the parser
+
+```bash
+dune utop src
 ```
 
 
