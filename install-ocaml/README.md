@@ -20,11 +20,12 @@ eval $(opam env)
 
 Finally, install a few extra OCaml packages:
 ```bash
-opam install -y dune merlin ocaml-lsp-server odoc ocamlformat utop menhir 
+opam install -y dune merlin ocaml-lsp-server odoc ocamlformat utop menhir ppx_inline_test
 ```
 In particular, this installation includes:
-- **dune**, a build system for OCaml projects, similar to make;
-- **utop**, a REPL interface for OCaml;
-- **Menhir**, a parser generator.
+- [**dune**](https://dune.readthedocs.io/), a build system for OCaml projects, similar to make;
+- [**utop**](https://opam.ocaml.org/blog/about-utop/), a REPL interface for OCaml;
+- [**Menhir**](http://gallium.inria.fr/~fpottier/menhir/), a parser generator;
+- [**ppx_inline_test**](https://github.com/janestreet/ppx_inline_test), a tool for writing in-line tests in OCaml.
 
 We will use these tools for all the projects of the LIP course.
