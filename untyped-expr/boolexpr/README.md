@@ -177,7 +177,8 @@ let white = [' ' '\t']+
 
 This section defines rules that associate tokens to their string representations.
 The lexer tries to match regular expressions in the order they are listed (similarly to the `match` construct).
-When it finds a match, it ouputs the token specified in the curly brackets:
+When it finds a match, it ouputs the token specified in the curly brackets.
+Our lexer is defined as follows (the terms `rule`, `read`, `parse` and `eof` are keywords):
 ```ocaml
 rule read =
   parse
