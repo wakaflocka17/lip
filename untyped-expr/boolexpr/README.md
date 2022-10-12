@@ -10,19 +10,19 @@ type boolExpr =
 ```
 and with the following big-step semantics:
 ```ocaml
------------------- [B-True]
-eval True = true
+------------------- [B-True]
+eval True => true
 
------------------- [B-False]
-eval False = false
+------------------- [B-False]
+eval False => false
 
-eval e0 = true
---------------------------- [B-IfTrue]
-eval If(e0,e1,e2) = eval e1
+eval e0 => true
+---------------------------- [B-IfTrue]
+eval If(e0,e1,e2) => eval e1
 
-eval e0 = false
---------------------------- [B-IfFalse]
-eval If(e0,e1,e2) = eval e2
+eval e0 => false
+---------------------------- [B-IfFalse]
+eval If(e0,e1,e2) => eval e2
 ```
 
 ## Project setup
