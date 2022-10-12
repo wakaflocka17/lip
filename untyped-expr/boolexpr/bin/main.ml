@@ -33,6 +33,9 @@ match Array.length(Sys.argv) with
   1 ->
   let s_exp = (match read_line() with Some s -> s | _ -> "")
   in parse s_exp |> eval |> print_bool
+| 2 when Sys.argv.(1) = "test" ->
+  let s_exp = read_file "test2"
+  in parse s_exp |> eval |> print_bool
 | 2 when Sys.argv.(1) = "trace" ->
   let s_exp = (match read_line() with Some s -> s | _ -> "")
   in parse s_exp |> trace |> print_trace
