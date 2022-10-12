@@ -195,8 +195,9 @@ Most of the lines are straightforward.
 The first line means that if the regular expression names `white` is matched, the lexer should just skips it, without producing a token.
 The last line matches the `eof` regular expression, i.e. the end of the file or string being lexed.
 
-## The driver
+## Generating the library
 
+In order to use the lexer and parser from OCaml, we write in `src/main.ml` a small driver function to translate a string into an AST:
 In `src/main.ml`:
 ```ocaml
 open Ast
@@ -206,6 +207,26 @@ let parse (s : string) : boolExpr =
   let ast = Parser.prog Lexer.read lexbuf in
   ast
 ```
+This function first transforms the string in input into a stream of tokens. 
+Then, is applies the lexer and the parser to transform this stream into an AST.
+
+At this point we can wrap the driver, lexer and parser into a library named `boolexprLib`.
+This is specified in the `src/dune` file:
+```ocaml
+(library
+ (name boolexprLib))
+
+(menhir
+ (modules parser))
+
+(ocamllex lexer)
+```
+
+If everything is correct, we can build the project without errors:
+```bash
+dune build
+```
+
 
 ## Testing the parser
 
