@@ -86,7 +86,7 @@ We discuss below these sections.
 
 ### Header
 
-The header, which is included between %{ and %}, contains code that will be copied verbatim into the generated parser. 
+The header, which is included between `%{` and `%}`, contains code that will be copied verbatim into the generated parser. 
 Here we just open the `Ast` module, in order to avoid pre-pending `Ast` to each `boolExpr` expressions
 (for instance, we can write `True` instead of `Ast.True`).
 
