@@ -77,11 +77,29 @@ We will discuss these files in the following sections.
 
 ## Parser
 
+The file `parser.mly` contains the grammar definition of our language.
+Menhir will process this file and produce the actual parser in OCaml 
+(this will be located in `_build/default/src/parser.ml`).
+
+The  grammar definition is split into four sections: header, declarations, rules, and trailer.
+We discuss below these sections.
+
+### Header
+
+The header, which is included between %{ and %}, contains code that will be copied verbatim into the generated parser. 
+Here we just open the `Ast` module, in order to avoid pre-pending `Ast` to each `boolExpr` expressions
+(for instance, we can write `True` instead of `Ast.True`).
+
 ```ocaml
 %{
 open Ast
 %}
+```
 
+### Declarations
+
+The declarations define the lexical tokens of our language:
+```ocaml
 %token TRUE
 %token FALSE
 %token LPAREN
@@ -90,11 +108,18 @@ open Ast
 %token THEN
 %token ELSE
 %token EOF
+```
+Note that these tokens are just names, and they are not yet linked to their concrete string representations.
+For instance, there is nothing that says that `LPAREN` and `RPAREN` correspond, respectively, to ( and ).
+The lexer will associate token names to their string representations.
+
+### Rules 
 
 %start <Ast.boolExpr> prog
 
 %%
 
+```ocaml
 prog:
   | e = expr; EOF { e }
 ;
