@@ -41,7 +41,7 @@ To work at this project you must have a local installation of OCaml.
 Look [here](install-ocaml) for minimal instructions.
 
 1. [A minimal language of boolean expressions](untyped-expr/boolexpr)
-1. Further boolean connectives
+1. [Boolean expressions with not, and, or](untyped-expr/more-boolexpr)
 1. Simple integer arithmetics
 
 ## References
