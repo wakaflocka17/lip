@@ -13,7 +13,7 @@ For instance:
 - `not true or true` must evaluate to `true`;
 - `not true and false` must evaluate to `false`;
 - `false and false or true` must evaluate to `true`;
-- `true or false or false` must evaluate to `true`.
+- `true or false and false` must evaluate to `true`.
 
 Furthermore, we want the if-then-else construct have lower priority over the other connectives. For instance:
 - `if true then true else false and false` must evaluate to `true`;
