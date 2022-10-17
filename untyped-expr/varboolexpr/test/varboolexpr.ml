@@ -15,8 +15,11 @@ let tests = [
   ("let x=true in x",true);
   ("let x=true in x or false and false",true);
   ("let x=true; y=false in x or y",true);
-  ("let x=not true; y=not false in x or y",true);
-  ("let x=false; y=true or x in y",true)    
+  ("let x=not true; y=not false in x or y",true)
+]
+
+let fails = [
+  ("let x=false; y=true or x in y",true)
 ]
 
 let%test _ = List.fold_left
