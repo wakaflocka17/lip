@@ -1,10 +1,26 @@
 # Boolean expressions with not, and, or
 
-Extend the language of [simple boolean expressions](../boolexpr) with the logical connectives:
-- **not e**, the logical negation of e;
-- **e1 and e2**, the conjunction between e1 and e2;
-- **e1 or e2**, the disjunction between e1 and e2.
-according to the AST defined in [ast.ml](src/ast.ml).
+Extend the language of [simple boolean expressions](../boolexpr) with the logical connectives, according to the following [AST](src/ast.ml):
+```ocaml
+type boolExpr =
+    True
+  | False
+  | Not of boolExpr
+  | And of boolExpr * boolExpr
+  | Or of boolExpr * boolExpr
+  | If of boolExpr * boolExpr * boolExpr
+```
+
+The meaning of the new constructors is the following:
+- **Not e**, the logical negation of e;
+- **And(e1,e2)**, the conjunction between e1 and e2;
+- **Or(e1,e2)**, the disjunction between e1 and e2.
+
+Follow the unit tests in [andboolexpr.ml](test/andboolexpr.ml) for the concrete syntax of the language. 
+To run the tests, execute the following command from the project directory:
+```
+dune test
+```
 
 You should take care of assigning the right [priority and associativity](http://gallium.inria.fr/~fpottier/menhir/manual.html#sec12) 
 to the new connectives, to make their semantics coherent with that of the corresponding OCaml operators. 
