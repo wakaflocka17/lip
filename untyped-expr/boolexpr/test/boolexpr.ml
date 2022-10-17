@@ -10,9 +10,11 @@ let tests = [
 
 let%test _ = List.fold_left
     (fun b (s,v) ->
-       print_string (s ^ "... ");
+       print_string (s ^ " => ");
        let b' = ((s |> parse |> eval) = v) in
-       print_endline (if b' then "[ok]" else "[NO]");
+       print_string (string_of_bool v);
+       print_string (" " ^ (if b' then "[OK]" else "[NO]"));
+       print_newline();
        b && b')
     true
     tests
