@@ -1,6 +1,6 @@
 # Boolean expressions with not, and, or
 
-Extend the language of boolean expressions with connectives:
+Extend the language of [simple boolean expressions](../boolexpr) with the logical connectives:
 - **not e**, the logical negation of e;
 - **e1 and e2**, the conjunction between e1 and e2;
 - **e1 or e2**, the disjunction between e1 and e2.
