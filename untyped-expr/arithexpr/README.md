@@ -1,6 +1,6 @@
 # Arithmetic expressions
 
-Extend the language of [boolean expressions seen](../andboolexpr) with arithmetic expressions on natural numbers,
+Extend the language of [boolean expressions](../andboolexpr) with arithmetic expressions on natural numbers,
 according to the following [AST](src/ast.ml):
 ```ocaml
 type expr =
