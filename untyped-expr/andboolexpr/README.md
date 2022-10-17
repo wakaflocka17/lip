@@ -35,3 +35,8 @@ For instance:
 Furthermore, we want the if-then-else construct have lower priority over the other connectives. For instance:
 - `if true then true else false and false` must evaluate to `true`;
 - `if true then false else false or true`  must evaluate to `false`.
+
+The extension will touch the following files and functions:
+- **parser.mly**: add new tokens, productions, and token priorities;
+- **lexer.mll**: add lexing rules for new tokens;
+- **src/main.ml**: extend the functions `string_of_boolexpr`, `trace1` and `eval` for the new variants.
