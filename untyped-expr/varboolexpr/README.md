@@ -1,6 +1,21 @@
 # Boolean expressions with propositional variables
 
-Extend the language of boolean expressions with variables and declarations.
+Extend the language of boolean expressions with variables and declarations, according to the following [AST](src/ast.ml):
+```ocaml
+type boolExpr =
+    True
+  | False
+  | Not of boolExpr
+  | And of boolExpr * boolExpr
+  | Or of boolExpr * boolExpr
+  | If of boolExpr * boolExpr * boolExpr
+  | Var of string
+
+type boolDecl = (string * boolExpr) list
+
+type boolProg = boolDecl * boolExpr
+```
+
 Expressions can now contain propositional variables, e.g.:
 ```
 x and y
