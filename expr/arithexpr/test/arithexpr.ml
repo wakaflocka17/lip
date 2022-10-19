@@ -22,7 +22,7 @@ let%test _ = List.fold_left
     (fun b (s,v) ->
        print_string (s ^ " => ");
        let b' = ((s |> parse |> eval) = v) in
-       print_string (string_of_exprval v);
+       print_string (string_of_val v);
        print_string (" " ^ (if b' then "[OK]" else "[NO]"));
        print_newline();
        b && b')
