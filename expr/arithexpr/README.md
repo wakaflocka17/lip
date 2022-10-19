@@ -46,6 +46,34 @@ e => n   n>0
 IsZero(e) => false
 ```
 
+## Small-step semantics
+
+The small-step semantics extends that of [boolean expressions](../andboolexpr#small-step-semantics) with the following rules:
+```ocaml
+nv ::= Zero | Succ(nv)
+
+e -> e'
+----------------------------- [S-Succ]
+Succ(e) -> Succ(e') 
+
+----------------------------- [S-PredSucc]
+Pred(Succ(nv)) -> nv 
+
+e -> e'
+----------------------------- [S-Pred]
+Pred(e) -> Pred(e') 
+
+----------------------------- [S-IsZeroZero]
+IsZero(Zero) -> True
+
+----------------------------- [S-IsZeroSucc]
+IsZero(Succ(nv)) -> False 
+
+e -> e'
+----------------------------- [S-IsZero]
+IsZero(e) -> IsZero(e') 
+```
+
 ## Concrete syntax
 
 Follow the unit tests in [arithexpr.ml](test/arithexpr.ml) for the concrete syntax of the language. 
