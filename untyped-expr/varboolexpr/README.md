@@ -78,7 +78,12 @@ let x = true ; x = false in x           (* the variable x is declared multiple t
 let x = true ; y = not x in x and y     (* the expression not x in declaration contains a variable *)
 ```
 
-Define a function to statically detect when the evaluation of a program will not fail.
+Write a function with type:
+```ocaml
+typecheck: boolProg -> bool
+```
+that statically detects when a program is well-typed.
+It is required that the evaluation of well-typed programs will not fail.
 
 
 ## Big-step semantics
