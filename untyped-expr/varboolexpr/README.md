@@ -64,6 +64,23 @@ expr:
   ...
 ```
 
+## Static semantics
+
+Unlike thep previous expression languages, this language contain syntactically-correct programs that do not have a semantics.
+This happens when the expression contains some variables which are not defined in the declarations.
+For instance:
+```
+let x = true ; y = false in x and z     (* the variable z is used but not declared *)
+```
+We also consider incorrect a declaration which binds the same name multiple times, or that use expressions with variables in declarations like e.g.:
+```
+let x = true ; x = false in x           (* the variable x is declared multiple times *)
+let x = true ; y = not x in x and y     (* the expression not x in declaration contains a variable *)
+```
+
+Define a function to statically detect when the evaluation of a program will not fail.
+
+
 ## Big-step semantics
 
 The big-step semantics of programs now takes as input a pair `(d,e)`, where `d` is a declaration and `e` is a boolean expression.
@@ -80,14 +97,3 @@ let rec eval (d,e) = match e with
     | None -> raise UnboundVar)
   ...
 ```
-
-## Static semantics
-
-Unlike thep previous exercises, this language contain syntactically correct programs, which do not have a semantics.
-This happens when the boolean expression contains some variables which are not defined in the declarations.
-For instance:
-```
-let x = true ; y = false in x and z
-```
-
-Define a function to statically detect when the evaluation of a program will not fail.
