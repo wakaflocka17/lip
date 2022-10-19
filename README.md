@@ -40,10 +40,10 @@ You can work on these exercises using the online Ocaml playground: [Try Ocaml](h
 To work at this project you must have a local installation of OCaml. 
 Look [here](install-ocaml) for minimal instructions.
 
-1. [A minimal language of boolean expressions](untyped-expr/boolexpr)
-1. [Boolean expressions with not, and, or](untyped-expr/andboolexpr)
-1. [Untyped arithmetic expressions](untyped-expr/arithexpr)
-1. [Boolean expressions with propositional variables](untyped-expr/varboolexpr)
+1. [A minimal language of boolean expressions](expr/boolexpr)
+1. [Boolean expressions with not, and, or](expr/andboolexpr)
+1. [Untyped arithmetic expressions](expr/arithexpr)
+1. [Boolean expressions with propositional variables](expr/varboolexpr)
 
 ## References
 
