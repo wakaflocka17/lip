@@ -1,11 +1,11 @@
 (lang dune 3.4)
 
-(name boolexpr)
+(name andboolexpr)
 
 (generate_opam_files true)
 
 (source
- (github bitbart/lip))
+ (github username/reponame))
 
 (authors "Massimo Bartoletti")
 
@@ -13,12 +13,12 @@
 
 (license LICENSE)
 
-(documentation https://github.com/bitbart/lip/tree/main/expr/boolexpr)
+(documentation https://github.com/bitbart/lip/tree/main/expr/andboolexpr)
 
 (package
- (name boolexpr)
- (synopsis "Interpreter of simple boolean expressions")
- (description "The interpreter implements small-step and big-step semantics of simple boolean expressions")
+ (name andboolexpr)
+ (synopsis "Interpreter of boolean expressions with not,and,or")
+ (description "The interpreter implements small-step and big-step semantics of boolean expressions with not,and,or")
  (depends ocaml dune)
  (tags
   (topics "to describe" your project)))
