@@ -38,6 +38,41 @@ e1 => b1   e2 => b2
 Or(e1,e2) => b1 or b2
 ```
 
+## Small-step semantics
+
+The small-step semantics extends that of the [basic language](../boolexpr#small-step-semantics) with the following rules:
+```ocaml
+e-> e'
+----------------------------- [S-Not]
+Not(e) -> Not(e') 
+
+----------------------------- [S-True]
+Not(True) -> False 
+
+----------------------------- [S-False]
+Not(False) -> True 
+
+e1 -> e1'
+----------------------------- [S-And]
+And(e1,e2) -> And(e1',e2) 
+
+----------------------------- [S-AndTrue]
+And(True,e2) -> e2
+
+----------------------------- [S-AndFalse]
+And(False,e2) -> False
+
+e1 -> e1'
+----------------------------- [S-Or]
+Or(e1,e2) -> Or(e1',e2) 
+
+----------------------------- [S-OrTrue]
+Or(True,e2) -> True
+
+----------------------------- [S-OrFalse]
+Or(False,e2) -> e2
+
+```
 
 ## Concrete syntax
 
