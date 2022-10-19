@@ -25,8 +25,8 @@ The extension will touch the following files and functions:
 
 The big-step semantics extends that of the [basic language](../boolexpr#big-step-semantics) with the following rules:
 ```ocaml
-e1 => b1   e2 => b2
----------------------------- [B-And]
+e => b
+---------------------------- [B-Not]
 Not(e) => not b
 
 e1 => b1   e2 => b2
