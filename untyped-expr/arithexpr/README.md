@@ -1,4 +1,4 @@
-# Arithmetic expressions
+# Untyped arithmetic expressions
 
 Extend the language of [boolean expressions](../andboolexpr) with arithmetic expressions on natural numbers,
 according to the following [AST](src/ast.ml):
