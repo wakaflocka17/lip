@@ -40,3 +40,18 @@ The extension will touch the following files and functions:
 - **parser.mly**: add new tokens, productions, and token priorities;
 - **lexer.mll**: add lexing rules for new tokens;
 - **src/main.ml**: extend the functions `string_of_boolexpr`, `trace1` and `eval` for the new variants.
+
+The big-step semantics extends that of the [basic language](../boolexpr#big-step-semantics) with the following rules:
+```ocaml
+e1 => b1   e2 => b2
+---------------------------- [B-And]
+Not(e) => not b
+
+e1 => b1   e2 => b2
+---------------------------- [B-And]
+And(e1,e2) => b1 && b2
+
+e1 => b1   e2 => b2
+---------------------------- [B-Or]
+Or(e1,e2) => b1 or b2
+```
