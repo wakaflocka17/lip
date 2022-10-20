@@ -106,3 +106,12 @@ e -> e'
 ----------------------------- [S-IsZero]
 IsZero(e) -> IsZero(e') 
 ```
+
+For example, this semantics should give rise to the following execution trace:
+```
+dune exec arithexpr trace test/test1
+iszero(pred(succ(pred(succ(0)))))   
+ -> iszero(pred(succ(0)))
+ -> iszero(0)
+ -> true
+```
