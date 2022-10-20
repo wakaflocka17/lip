@@ -18,7 +18,8 @@ let tests = [
   ("let x=true in x",true);
   ("let x=true in x or false and false",true);
   ("let x=true; y=false in x or y",true);
-  ("let x=not true; y=not false in x or y",true)
+  ("let x=not true; y=not false in x or y",true);
+  ("let x=if true then false else true; y=not false; z=not true in if x then y else z",false)
 ];;
 
 let oktests = List.map (fun (x,y) -> (x,Ok y)) tests;;
