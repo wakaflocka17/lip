@@ -91,17 +91,11 @@ It is required that the evaluation of well-typed programs never fails.
 
 ## Big-step semantics
 
-The big-step semantics of programs now takes as input a pair `(d,e)`, where `d` is a declaration and `e` is a boolean expression.
+The big-step semantics of programs now takes as input a program `(d,e)`, where `d` is a declaration and `e` is a boolean expression.
 In order to define the `eval` function, you will need to define a function to evaluate a declaration, and use this 
-to give semantics to the case `Var`.
-
-For instance, a possible implementation of the `eval` function could have the following form:
-```ocaml
-let rec eval (d,e) = match e with
-    True -> true
-  | False -> false
-  | Var(x) -> (match apply x d with
-      Some b -> b
-    | None -> raise UnboundVar)
-  ...
+to give semantics to the case `Var`. There are various ways to do this: my suggestion is to write a function which transforms a declaration into a function rho mapping variables to boolean values (a so-called **environment**).
+In this way, the rule to evaluate variable will take the form:
+```
+------------------------------------- [B-Var]
+Var x => rho x
 ```
