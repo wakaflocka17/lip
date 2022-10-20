@@ -13,15 +13,6 @@ let weval e = try Ok (eval e)
 ;;
   
 let tests = [
-  ("false",Bool false);
-  ("if true then false else true",Bool false);
-  ("if true then (if true then false else true) else (if true then true else false)",Bool false);
-  ("if (if false then false else false) then (if false then true else false) else (if true then false else true)",Bool false);
-  ("if (if (if false then false else false) then (if false then true else false) else (if true then false else true)) then (if false then true else false) else (if true then false else true)",Bool false);
-  ("not true or true",Bool true);
-  ("not true and false",Bool false);
-  ("false and false or true",Bool true);
-  ("true or false and false",Bool true);
   ("if true then true else false and false",Bool true);
   ("if true then false else false or true",Bool false);
   ("succ 0",Nat 1);
