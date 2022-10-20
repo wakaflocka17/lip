@@ -96,6 +96,14 @@ In order to define the `eval` function, you will need to define a function to ev
 to give semantics to the case `Var`. There are various ways to do this: my suggestion is to write a function which transforms a declaration into a function rho mapping variables to boolean values (a so-called **environment**).
 In this way, the rule to evaluate variable will take the form:
 ```
-------------------------------------- [B-Var]
+---------------- [B-Var]
 Var x => rho x
 ```
+
+In order to transform a declaration (represented as a list of pairs) into a function, I suggest to write a recursive function 
+```ocaml
+env_of_decl : boolDecl -> string -> bool
+```
+with the following behaviour:
+- in the base case (empty declaration), it outputs the always-undefined function;
+- in the inductive case (x,e)::d, it computes the environment from d, and extends it with the binding x -> b, where b is the evaluation of e.
