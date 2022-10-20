@@ -64,18 +64,21 @@ expr:
   ...
 ```
 
-## Static semantics
 
-Unlike thep previous expression languages, this language contain syntactically-correct programs that do not have a semantics.
-This happens when the expression contains some variables which are not defined in the declarations.
+## Static checks
+
+This language allows one to write syntactically-correct programs which have an undefined semantics.
+This happens when the expression within a program contains some variables which are not defined in the declarations.
 For instance:
 ```
 let x = true ; y = false in x and z     (* the variable z is used but not declared *)
 ```
-We also consider incorrect a declaration which binds the same name multiple times, or that use expressions with variables in declarations like e.g.:
+We want to rule out these troublesome programs before they are executed, i.e. at **static time**.
+
+We also consider incorrect a program whose declaration binds the same variable multiple times, or use expressions with variables in declarations:
 ```
 let x = true ; x = false in x           (* the variable x is declared multiple times *)
-let x = true ; y = not x in x and y     (* the expression not x in declaration contains a variable *)
+let x = true ; y = not x in x and y     (* the expression "not x" in declaration contains a variable *)
 ```
 
 Write a function with type:
@@ -83,7 +86,7 @@ Write a function with type:
 typecheck: boolProg -> bool
 ```
 that statically detects when a program is well-typed.
-It is required that the evaluation of well-typed programs will not fail.
+It is required that the evaluation of well-typed programs never fails.
 
 
 ## Big-step semantics
