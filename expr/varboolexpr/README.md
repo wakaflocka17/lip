@@ -1,6 +1,6 @@
-# Boolean expressions with propositional variables
+# Boolean expressions with global declarations
 
-Extend the language of boolean expressions with variables and declarations, according to the following [AST](src/ast.ml):
+Extend the language of boolean expressions with variables and global declarations, according to the following [AST](src/ast.ml):
 ```ocaml
 type boolExpr =
     True
