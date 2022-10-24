@@ -2,6 +2,8 @@
 
 LiP students are expected to fork the repository and push solutions to the exercises on their fork.
 
+Invitation to the Discord server: **https://discord.gg/sv2bZczN** (expires on October 31st, 2022)
+
 ## Ocaml basics #1
 
 You can work on these exercises using the online Ocaml playground: [Try Ocaml](https://try.ocamlpro.com/).
@@ -43,7 +45,7 @@ Look [here](install-ocaml) for minimal instructions.
 1. [A minimal language of boolean expressions](expr/boolexpr)
 1. [Boolean expressions with not, and, or](expr/andboolexpr)
 1. [Typed arithmetic expressions with dynamic type checking](expr/arithexpr)
-1. [Typed arithmetic expressions with static type checking](expr/tarithexpr)
+1. [Typed arithmetic expressions with static type checking](expr/sarithexpr)
 1. [Untyped arithmetic expressions](expr/uarithexpr)
 1. [Boolean expressions with propositional variables](expr/varboolexpr)
 
