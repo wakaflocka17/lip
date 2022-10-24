@@ -18,13 +18,19 @@ type expr =
 
 ## Big-step semantics
 
-```
+```ocaml
 ------------------------------ [B-Var]
 <x,rho> => rho x
 
 <e1,rho> => v1   <e2,rho{v1/x}> => v2
-------------------------------------- [B-Var]
+------------------------------------- [B-Let]
 <let x = e1 in e2,rho> => v2
-
 ```
 
+## Small-step semantics
+
+```ocaml
+
+------------------------------ [S-LetV]
+let x = v1 in e2 -> e2[x->v1]
+```
