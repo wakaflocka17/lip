@@ -2,6 +2,8 @@
 
 LiP students are expected to fork the repository and push solutions to the exercises on their fork.
 
+Invitation to the Discord server: **https://discord.gg/sv2bZczN** (expires on October 31st, 2022)
+
 ## Ocaml basics #1
 
 You can work on these exercises using the online Ocaml playground: [Try Ocaml](https://try.ocamlpro.com/).
