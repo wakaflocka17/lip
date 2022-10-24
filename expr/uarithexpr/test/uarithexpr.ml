@@ -13,23 +13,23 @@ let weval e = try Ok (eval e)
 ;;
   
 let tests = [
-  ("if true then true else false and false",Bool true);
-  ("if true then false else false or true",Bool false);
+  ("if true then true else false and false",Nat 1);
+  ("if true then false else false or true",Nat 0);
   ("succ 0",Nat 1);
   ("succ succ succ pred pred succ succ pred succ pred succ 0", Nat 3);
-  ("iszero pred succ 0", Bool true);
-  ("iszero pred succ 0 and not iszero succ pred succ 0", Bool true);
-]
+  ("iszero pred succ 0", Nat 1);
+  ("iszero pred succ 0 and not iszero succ pred succ 0", Nat 1);
+  ("iszero true", Nat 0);
+  ("succ iszero 0", Nat 2);
+  ("not 0", Nat 1);
+];;
 
 let oktests = List.map (fun (x,y) -> (x,Ok y)) tests;;
 
 let errtests = [
-  ("iszero true", Error);
-  ("succ iszero 0", Error);
-  ("not 0", Error);
   ("pred 0", Error);
   ("pred pred succ 0", Error)
-]
+];;
 
 let%test _ = List.fold_left
     (fun b (s,v) ->
@@ -41,3 +41,4 @@ let%test _ = List.fold_left
        b && b')
     true
     (oktests @ errtests)
+;;
