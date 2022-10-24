@@ -15,3 +15,16 @@ type expr =
   | Var of string     
   | Let of string * expr * expr
 ```
+
+## Big-step semantics
+
+```
+------------------------------ [B-Var]
+<x,rho> => rho x
+
+<e1,rho> => v1   <e2,rho{v1/x}> => v2
+------------------------------------- [B-Var]
+<let x = e1 in e2,rho> => v2
+
+```
+
