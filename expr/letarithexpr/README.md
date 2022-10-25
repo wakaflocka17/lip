@@ -1,4 +1,4 @@
-# Arithmetic expressions with let bindings
+# Arithmetic expressions with let bindings and dynamic type checking
 
 Extend the language of [arithmetic expressions](../arithexpr) with let bindnigs, according to the following [AST](src/ast.ml):
 ```ocaml
