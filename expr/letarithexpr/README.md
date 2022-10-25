@@ -16,6 +16,23 @@ type expr =
   | Let of string * expr * expr
 ```
 
+# Concrete syntax 
+
+Follow the unit tests in [letarithexpr.ml](test/lwrarithexpr.ml) for the concrete syntax of the language. 
+To run the tests, execute the following command from the project directory:
+```
+dune test
+```
+For example, the following is a syntactically correct expression:
+```
+let x = 0 in let y = succ(x) in iszero(pred(let z = succ(y) in pred(pred(succ(z)))))
+```
+You can check its AST via `dune utop src` as follows:
+```ocaml
+"iszero pred succ 0 and not iszero succ pred succ 0" |> ArithexprLib.Main.parse;;
+```
+
+
 ## Big-step semantics
 
 ```ocaml
