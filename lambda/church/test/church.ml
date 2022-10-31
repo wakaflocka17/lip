@@ -48,6 +48,32 @@ let%test _ =
 
 
 (**********************************************************************
+ max_nat test : (term, expected result)
+ **********************************************************************)
+
+let test_max_nat = [
+  ("fun x. x y", 1);
+  ("fun x1. x1 x2", 3);
+  ("fun x10 . (fun x1. x1 x2) (fun x11 . x16)", 17);  
+]
+
+let%test _ =
+  print_newline ();
+  print_endline ("*** Testing max_nat...");
+  List.fold_left
+    (fun b (ts,er) ->
+       print_string ts;
+       let ar = max_nat (parse ts) in 
+       let b' = (ar = er) in
+       print_string (" : " ^ string_of_int ar);
+       print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_int er ^ "]"));
+       print_newline();
+       b && b')
+    true
+    test_max_nat
+
+
+(**********************************************************************
  is_free test : (variable, term, result)
  **********************************************************************)
     
@@ -194,7 +220,8 @@ let test_church = [
   ("fst (pair " ^ t1 ^ t2 ^ ")", 6, t1);
   ("snd (pair " ^ t1 ^ t2 ^ ")", 6, t2);
   ("scc 1", 3, "2");
-  ("scc (scc 1)", 6, "3");    
+  ("scc (scc 1)", 6, "3");
+  ("scc (scc (scc (scc 1)))", 12, "5");
 ]
 
 let%test _ =

@@ -22,6 +22,40 @@ let rec size = failwith "TODO"
 
 
 (**********************************************************************
+ max_nat : term -> int
+
+ max_nat t computes the least n such that: 
+ for all i : xi in vars_of_term t => i < n
+  **********************************************************************)
+
+let rec vars_of_term = function
+    Var x -> [x]
+  | Abs(x,t) -> x::(vars_of_term t)
+  | App(t1,t2) -> (vars_of_term t1) @ (vars_of_term t2)
+
+let rec pow a = function
+  | 0 -> 1
+  | 1 -> a
+  | n -> let b = pow a (n / 2) in
+    b * b * (if n mod 2 = 0 then 1 else a)
+            
+let is_digit = function '0' .. '9' -> true | _ -> false
+
+let explode s = List.map (fun x -> String.make 1 x |> int_of_string) (List.filter is_digit (List.init (String.length s) (String.get s)))
+
+let nat_of_var xl = List.fold_left (fun x y -> x + y) 0 (List.mapi (fun i x -> x * (pow 10 i)) (List.rev (explode xl)))
+
+let rec max_of_list = function 
+  | [] -> 0
+  | x::xs -> max x (max_of_list xs)
+                
+let max_nat t =
+  let xl = vars_of_term t in
+  let nl = List.map nat_of_var xl in
+  1 +  max_of_list nl
+
+
+(**********************************************************************
  is_free : string -> term -> bool
 
  Usage: is_free x t = true iff the variable x occurs free in t
