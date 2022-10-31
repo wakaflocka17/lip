@@ -17,6 +17,7 @@ let test_parse = [
   ("fun x. fun y. x y z", Abs("x",Abs("y",App(App(Var "x",Var "y"),Var "z"))));
   ("fun x. fun y. fun z. x y z", Abs("x",Abs("y",Abs("z",App(App(Var "x",Var "y"),Var "z")))));
   ("(fun x. x) (fun y. y)", App(Abs("x",Var("x")),Abs("y",Var("y"))));
+  ("id id", App(t_id,t_id));  
   ("(fun x. x) (fun y. y) (fun z. z)", App(App(Abs("x",Var("x")),Abs("y",Var("y"))),Abs("z",Var("z"))));
   ("tru",t_tru);
   ("fls",t_fls);
@@ -140,21 +141,18 @@ let%test _ =
  trace test : (start term, number of steps, expected result up-to alpha-conversion)
  **********************************************************************)
 
-let id = "(fun x. x x)"
-let omega = "(fun x. x x)"
+let iftru1 = "(fun l. fun m. fun n. l m n) (fun t. fun f. t) v1 v2"
 
-let iftru1 = "(fun l. fun m. fun n. l m n) (fun t. fun f. t) (fun v . v) (fun w . w w)"
-
-let iffls1 = "(fun l. fun m. fun n. l m n) (fun t. fun f. f) (fun v . v) (fun w . w w)"
+let iffls1 = "(fun l. fun m. fun n. l m n) (fun t. fun f. f) v1 v2"
   
   
 let test_trace = [
   ("fun x. x", 1, "fun z. z");
-  (omega ^ omega, 1, omega ^ omega);
-  ("(fun x . y) (" ^ omega ^ omega ^ ")", 1, "(fun x . y) (" ^ omega ^ omega ^ ")");
-  ("(fun x. x) ((fun x. x) (fun z. (fun x. x) z))", 2, "fun z. (fun x. x) z");
-  (iftru1, 5, "fun v. v");
-  (iffls1, 5, "fun w. w w");  
+  ("omega omega", 1, "omega omega");
+  ("(fun x . y) (omega omega)", 1, "y");
+  ("id (id (fun z. id z))", 2, "fun z. (fun x. x) z");
+  (iftru1, 5, "v1");
+  (iffls1, 5, "v2");  
 ]
 
 let rec last = function
@@ -169,7 +167,7 @@ let%test _ =
     (fun b (ts,n,ts') ->
        let t = parse ts and t' = parse ts' in
        let ar = last (trace n t) in (* actual result *)
-       print_string (ts ^ " --" ^ string_of_int n ^ "-> " ^ string_of_term ar);
+       print_string (string_of_term t ^ " --" ^ string_of_int n ^ "-> " ^ string_of_term ar);
        let b' = (equiv ar t') in
        print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_term t' ^ "]"));
        print_newline();
@@ -195,6 +193,8 @@ let test_church = [
   ("and fls fls", 5, "fls");
   ("fst (pair " ^ t1 ^ t2 ^ ")", 6, t1);
   ("snd (pair " ^ t1 ^ t2 ^ ")", 6, t2);
+  ("scc 1", 3, "2");
+  ("scc (scc 1)", 6, "3");    
 ]
 
 let%test _ =

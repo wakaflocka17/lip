@@ -5,7 +5,8 @@ type term =
 ;;
 
 let t_id = Abs("x",Var "x")
-
+let t_omega = Abs("x",App(Var "x",Var "x"))
+  
 let t_tru = Abs("t",Abs("f",Var "t"))
 let t_fls = Abs("t",Abs("f",Var "f"))
 let t_ift = Abs("g",Abs("t",Abs("e",App(App(Var "g",Var "t"),Var "e"))))
@@ -24,6 +25,8 @@ let t_nat n = Abs("s",Abs("z",t_nat_rec n))
 let t_scc = Abs("n",Abs("s",Abs("z",App(Var "s",App(App(Var "n",Var "s"),Var "z")))))
 
 let s_id  = "(fun x . x)"
+let s_omega = "(fun x. x x)"
+
 let s_tru = "(fun t. fun f. t)"
 let s_fls = "(fun t. fun f. f)"
 let s_ift = "(fun g. fun t. fun e. g t e)"
