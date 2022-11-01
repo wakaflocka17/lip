@@ -24,14 +24,12 @@ type term =
 
 The repository already contains a pretty printer for the terms of the language, with type:
 ```ocaml
-open UntypedLib.Main;;
-open UntypedLib.Ast;;
-
 string_of_term : term -> string
 ```
 You can test it via `dune utop lib` as follows:
 ```ocaml
-
+open UntypedLib.Main;;
+open UntypedLib.Ast;;
 Abs("z", App(App (Var "x", Var "y"), Var "z")) |> string_of_term;;
 - : string = "fun z. (x y) z"
 ```
