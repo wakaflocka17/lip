@@ -9,8 +9,6 @@ into lib/main.ml (use the command `git mv lib/main.ml_skeleton lib/main.ml` from
 
 ## Abstract syntax
 
-The terms of the language are variables, lambda-abstractions and
-applications between two terms.
 The abstract syntax of the language is defined in [ast.ml](lib/ast.ml)
 as follows:
 ```ocaml
@@ -19,6 +17,12 @@ type term =
   | Abs of string * term
   | App of term * term
 ```
+The terms of the language are variables, lambda-abstractions and applications between two terms.
+For instance, the term:
+```ocaml
+Abs("x", Var "x")
+```
+represents the identity function.
 
 ## Pretty printer
 
@@ -30,32 +34,27 @@ You can test it via `dune utop lib` as follows:
 ```ocaml
 open UntypedLib.Main;;
 open UntypedLib.Ast;;
+
 Abs("z", App(App (Var "x", Var "y"), Var "z")) |> string_of_term;;
 - : string = "fun z. (x y) z"
 ```
 Hereafter, when we use utop we assume that the first two `open` commands are always given.
 
-
 ## Concrete syntax
 
 The [lexer](lib/lexer.mll) and the [parser](parser.mly)
 are already included in the repository.
-The parser ensures that function application associates to the left.
+The parser ensures that application associates to the left.
 For instance, in utop:
 ```ocaml
 "f g h" |> parse;;
 - : term = App (App (Var "f", Var "g"), Var "h")
 
-(fun x. x) (fun y. y z) (fun z. x y z)" |> parse |> string_of_term;;
+"(fun x. x) (fun y. y z) (fun z. x y z)" |> parse |> string_of_term;;
 - : string = "((fun x. x) (fun y. y z)) (fun z. (x y) z)"
 ```
 
 ## Free variables
-
-Write a function to detect if a variable is free in a term, with type:
-```ocaml
-is_free : string -> term -> bool
-```
 
 The free variables of a term t, written fv(t), are defined inductively as follows:
 ```
@@ -66,7 +65,12 @@ fv(fun x . t) = fv(t) \ {x}
 fv(t1 t2) = fv(t1) U fv(t2)
 ```
 
-For instance, we have that:
+Write a function `is_free` to detect if a variable is free in a term:
+```ocaml
+is_free : string -> term -> bool
+```
+
+For instance, we expect that:
 ```ocaml
 "fun x . x (fun y . (x y) z)" |> parse |> (is_free "x");;
 - : bool = false
@@ -99,44 +103,55 @@ equiv ("fun x . (fun y . x)" |> parse) ("fun y . (fun x . y)" |> parse);;
 
 ## Substitutions
 
-Write a function to substitute a term t for all the free occurrences of a variable x within a term t'.
-Such substitution is denoted as `[x -> t] t'`.
-For instance, we expect that:
+A substitution `[x -> t] t'` replaces all the free occurrences of the variable x in t' with the term t.
+For instance:
 ```
 [x -> (fun z . z w)] (fun y . x) = fun y . fun z . z w
 ```
-Note bound occurrences of x must *not* be substituted. For instance is would be *wrong* to obtain:
+Instead, bound occurrences of x must *not* be substituted. For instance is would be wrong to obtain:
 ```
-[x -> y] (fun x . x) = fun x . y
+[x -> y] (fun x . x) = fun x . y     (* WRONG! *)
 ```
-Since the term `fun x . x` is alpha-equivalent to `fun z . z`, from which we would obtain:
+To see why the above is wrong, note that by renaming the term `fun x . x` with the alpha-equivalent term `fun z . z`, we would obtain:
 ```
 [x -> y] (fun z . z) = fun z . z
 ```
-Another delicate issue is that of **variable capture**, as in the following substitution:
+Another delicate issue is that of **variable capture**. For instence, consider the following substitution:
 ```
 [x -> z] (fun z . x)
 ```
-Here, it would be *wrong* to obtain:
+Here, it would be wrong to obtain:
 ```
-[x -> z] (fun z . x) = fun z . z
+[x -> z] (fun z . x) = fun z . z     (* WRONG! *)
 ```
-Indeed, since `fun z . x` is alpha-equivalent to `fun w . x`, we would also obtain:
+To see why this is wrong, note that by renaming `fun z . x` with the alpha-equivalent `fun w . x`, we would obtain:
 ```
 [x -> z] (fun z . x) = fun w . z
 ```
-but the two resulting terms `fun z . z` and `fun w . z` are *not* alpha-equivalent.
+Note that the two resulting terms `fun z . z` and `fun w . z` are *not* alpha-equivalent: hence, the first substitution is wrong.
 
 To guarantee that substitutions are capture-avoiding, we implement an **explicit renaming of bound variables**.
-To this purpose, substitutions take an extra argument i, which stands for the index of a fresh variable that we can use for such renamings.
-For instance, assuming this index is 1, we have:
+To this purpose, substitutions take an extra argument: 
 ```
+[x -> t] k t'
+```
+The natural number k stands for the index of a fresh variable that we can use for such renamings.
+For instance, we have:
+```
+[x -> z] (fun z . x) = fun x1 . z
+```
+Here, to avoid captures we have alpha-converted `(fun z . x)` into `(fun x1 . x)`, where the fresh variable x1 has been obtained by concatenating x with the index 1.
+
+Other examples of substitution are the following:
+```
+[x -> z] 1 (fun z . x) (fun y. x) (fun z. z) = (fun x1. z) (fun y. z) (fun x2. x2)
+
 [x -> y z] 1 (fun y . x (fun w . x) = fun x1 . (y z) (fun w . y z)
 
 [x -> y z] 3 (fun y . x (fun z . x y z) = fun x3 . (y z) (fun x4 . ((y z) x3) x4)
 ```
 
-Using this technique, implement a substitution function with the following type:
+Using this technique, write a substitution function with the following type:
 ```ocaml
 subst : string -> term -> int -> term -> term * int
 ```
