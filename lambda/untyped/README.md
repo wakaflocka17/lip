@@ -163,9 +163,10 @@ subst "x" ("y z" |> parse) 3 ("fun y . x  (fun z . x y z)" |> parse) |> fst |> s
 
 ## Small-step semantics
 
-Implement the small-step semantics of the language, using the *call-by-value* evaluation strategy:
+The terms of the lambda-calculus can be evaluated according to different strategies, which determine which sub-terms are reduced first.
+The **call-by-value** evaluation strategy is defined by the following rules:
 ```
-v ::= fun x . t
+v ::= fun x . t                 (values)
 
 t1 -> t1'
 ------------------------------- [E-App1]
@@ -179,7 +180,7 @@ v1 t2 -> v1 t2'
 (fun x . t1) v2 -> [x -> v2] t1
 ```
 
-The evaluation function must have the following type:
+Implement the call-by-value strategy as a function with the following type:
 ```ocaml
 trace : int -> term -> term
 ```
