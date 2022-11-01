@@ -80,8 +80,21 @@ For instance, we have that:
 
 ## Alpha-equivalence
 
+To terms are alpha-equivalent when they have exactly the same structure, except for the choice of bound names.
+Write a funtion with type:
 ```ocaml
 equiv : term -> term -> bool
+```
+which detects if two terms are alpha-equivalent. For instance, we must have:
+```ocaml
+equiv ("fun x . x y" |> parse) ("fun z . z y" |> parse);;
+- : bool = true
+
+equiv ("fun x . x y" |> parse) ("fun z . z z" |> parse);;
+- : bool = false
+
+equiv ("fun x . (fun y . x)" |> parse) ("fun y . (fun x . y)" |> parse);;
+- : bool = true
 ```
 
 ## Substitutions
