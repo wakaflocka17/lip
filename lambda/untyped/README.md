@@ -82,6 +82,34 @@ For instance, we expect that:
 - : bool = true
 ```
 
+## Variable renaming
+
+Write a function with type:
+```
+rename : string -> string -> term -> term
+```
+such that `rename x x' t` replaces all the free occurrences of `x` in `t` as `x'`. 
+For instance:
+```ocaml
+rename "x" "w" ("(fun z . x y) (fun y. x)" |> parse) |> string_of_term;;
+- : string = "(fun z. w y) (fun y. w)"
+
+rename "y" "w" ("(fun z . x y) (fun y. x)" |> parse) |> string_of_term;;
+- : string = "(fun z. x w) (fun y. x)"
+
+rename "z" "w" ("(fun z . x y) (fun y. x)" |> parse) |> string_of_term;;
+- : string = "(fun z. x y) (fun y. x)"
+```
+The function must raise an exception in case `x'` occur (either free or bound) in `t`.
+For instance:
+```ocaml
+rename "y" "x" ("(fun z . x y) (fun y. x)" |> parse) |> string_of_term;;
+Exception: Failure "name x must be fresh!".
+
+rename "y" "z" ("(fun z . x y) (fun y. x)" |> parse) |> string_of_term;;
+Exception: Failure "name z must be fresh!".
+```
+
 ## Alpha-equivalence
 
 To terms are alpha-equivalent when they have exactly the same structure, except for the choice of bound names.
