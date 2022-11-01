@@ -148,6 +148,40 @@ subst "x" ("y z" |> parse) 3 ("fun y . x  (fun z . x y z)" |> parse) |> fst |> s
 
 ## Small-step semantics
 
+Implement the small-step semantics of the language, using the *call-by-value* evaluation strategy:
+```
+v ::= fun x . t
+
+t1 -> t1'
+------------------------------- [E-App1]
+t1 t2 -> t1' t2
+
+t2 -> t2'
+------------------------------- [E-App2]
+v1 t2 -> v1 t2'
+
+------------------------------- [E-AppAbs]
+(fun x . t1) v2 -> [x -> v2] t1
+```
+
+The evaluation function must have the following type:
 ```ocaml
 trace : int -> term -> term
+```
+where the integer argument stands for the number of steps to be performed.
+
+
+## Frontend and testing
+
+Run the frontend with the command:
+```
+dune exec untyped n
+```
+where n is the number of evaluation steps. For instance, with n=4 we should obtain:
+```
+((fun x. (x x) x) (fun y. y)) (fun z. z)
+ -> (((fun y. y) (fun y. y)) (fun y. y)) (fun z. z)
+ -> ((fun y. y) (fun y. y)) (fun z. z)
+ -> (fun y. y) (fun z. z)
+ -> fun z. z
 ```
