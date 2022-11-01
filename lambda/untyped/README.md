@@ -99,8 +99,51 @@ equiv ("fun x . (fun y . x)" |> parse) ("fun y . (fun x . y)" |> parse);;
 
 ## Substitutions
 
+Write a function to substitute a term t for all the free occurrences of a variable x within a term t'.
+Such substitution is denoted as `[x -> t] t'`.
+For instance, we expect that:
+```
+[x -> (fun z . z w)] (fun y . x) = fun y . fun z . z w
+```
+Note bound occurrences of x must *not* be substituted. For instance is would be *wrong* to obtain:
+```
+[x -> y] (fun x . x) = fun x . y
+```
+Since the term `fun x . x` is alpha-equivalent to `fun z . z`, from which we would obtain:
+```
+[x -> y] (fun z . z) = fun z . z
+```
+Another delicate issue is that of **variable capture**, as in the following substitution:
+```
+[x -> z] (fun z . x)
+```
+Here, it would be *wrong* to obtain:
+```
+[x -> z] (fun z . x) = fun z . z
+```
+Indeed, since `fun z . x` is alpha-equivalent to `fun w . x`, we would also obtain:
+```
+[x -> z] (fun z . x) = fun w . z
+```
+but the two resulting terms `fun z . z` and `fun w . z` are *not* alpha-equivalent.
+
+To guarantee that substitutions are capture-avoiding, we implement an **explicit renaming of bound variables**.
+To this purpose, substitutions take an extra argument i, which stands for the index of a fresh variable that we can use for such renamings.
+For instance, assuming this index is 1, we have:
+```
+[x -> y z] 1 (fun y . x (fun w . x) = fun x1 . (y z) (fun w . y z)
+
+[x -> y z] 3 (fun y . x (fun z . x y z) = fun x3 . (y z) (fun x4 . ((y z) x3) x4)
+```
+
+Using this technique, implement a substitution function with the following type:
 ```ocaml
 subst : string -> term -> int -> term -> term * int
+```
+For instance, we expect that:
+```ocaml
+subst "x" ("y z" |> parse) 3 ("fun y . x  (fun z . x y z)" |> parse) |> fst |> string_of_term;;
+- : string = "fun x3. (y z) (fun x4. ((y z) x3) x4)"
 ```
 
 ## Small-step semantics
