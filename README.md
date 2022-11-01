@@ -57,3 +57,4 @@ Look [here](install-ocaml) for minimal instructions.
 ## References
 
 - [OCaml Programming: Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/cover.html)
+- B. Pierce. Types and Programming Languages. MIT Press, 2002
