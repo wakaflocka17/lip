@@ -29,6 +29,7 @@ snd = fun p. p fls
 **Operators on Church numerals**
 ```
 scc = fun n. fun s. fun z. s (n s z)
+add = fun m. fun n. fun s. fun z. m s (n s z)
 ```
 
 ## Lexer and parser
