@@ -62,11 +62,11 @@ Implement the **normal order** evaluation strategy, which reduces first the oute
 This strategy is defined by the following rules, which are processed in order:
 ```
 t -> t'
--------- [NO-Abs]
-fun x. t
+--------------------- [NO-Abs]
+fun x. t -> fun x. t'
 
 ------------------------------ [NO-AppAbs]
-(fun x. t1) t2 -> [x -> t1] t2
+(fun x. t1) t2 -> [x -> t2] t1
 
 t1 -> t1'
 --------------- [NO-App1]
