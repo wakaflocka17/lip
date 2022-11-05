@@ -1,3 +1,4 @@
+open AndboolexprLib.Ast
 open AndboolexprLib.Main
   
 let tests = [
@@ -32,12 +33,24 @@ let%test _ =
     true
     tests
 
+let rec last = function
+    [] -> failwith "last on empty list"
+  | [x] -> x
+  | _::l -> last l
+
+let val_of_expr = function
+    True -> Some true
+  | False -> Some false
+  | _ -> None
+
+let eval_smallstep e = val_of_expr (last (trace e))
+
 let%test _ =
   print_newline();  
   print_endline ("*** Testing small-step semantics...");
   List.fold_left
     (fun b (s,v) ->
-       print_string (s ^ " => ");       
+       print_string (s ^ " -> ");       
        let ar = s |> parse |> eval_smallstep in
        print_string (string_of_val ar);
        let b' = (ar = Some v) in

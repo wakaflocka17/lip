@@ -1,3 +1,4 @@
+open ArithexprLib.Ast
 open ArithexprLib.Main
 
 (* wrapping results for testing *)
@@ -10,7 +11,6 @@ let string_of_wval = function
 
 let weval e = try Ok (eval e) 
   with _ -> Error
-;;
   
 let tests = [
   ("if true then true else false and false",Bool true);
@@ -31,12 +31,52 @@ let errtests = [
   ("pred pred succ 0", Error)
 ]
 
-let%test _ = List.fold_left
+let%test _ =
+  print_newline();  
+  print_endline ("*** Testing big-step semantics...");
+  List.fold_left
     (fun b (s,v) ->
        print_string (s ^ " => ");
-       let b' = ((s |> parse |> weval) = v) in
-       print_string (string_of_wval v);
-       print_string (" " ^ (if b' then "[OK]" else "[NO]"));
+       let ar = s |> parse |> weval in
+       print_string (string_of_wval ar);       
+       let b' = (ar = v) in
+       if b' then print_string(" [OK]")
+       else print_string (" [NO: expected " ^ string_of_wval v ^ "]");     
+       print_newline();
+       b && b')
+    true
+    (oktests @ errtests)
+
+
+let rec last = function
+    [] -> failwith "last on empty list"
+  | [x] -> x
+  | _::l -> last l
+
+let rec int_of_nat = function
+    Zero -> 0
+  | Succ n -> 1 + int_of_nat n
+  | _ -> failwith "int_of_nat on non-nat"
+                
+let wval_of_expr = function
+    True -> Ok (Bool true)
+  | False -> Ok (Bool false)
+  | e when is_succ e -> Ok (Nat (int_of_nat e))
+  | _ -> Error
+
+let weval_smallstep e = wval_of_expr (last (trace e))
+
+let%test _ =
+  print_newline();  
+  print_endline ("*** Testing small-step semantics...");
+  List.fold_left
+    (fun b (s,v) ->
+       print_string (s ^ " -> ");       
+       let ar = s |> parse |> weval_smallstep in
+       print_string (string_of_wval ar);
+       let b' = (ar = v) in
+       if b' then print_string(" [OK]")
+       else print_string (" [NO: expected " ^ string_of_wval v ^ "]");
        print_newline();
        b && b')
     true
