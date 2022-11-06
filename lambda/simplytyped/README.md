@@ -46,7 +46,7 @@ typecheck : (string -> ty) -> term -> ty
 ```
 such that `typecheck gamma t` returns the type of the term `t` in the type environment `gamma`, or raises a `TypeError` exception if the term is not typeable.
 
-For instance, we expect to have:
+For instance, in the empty type environment (`bot`) we expect to have:
 ```ocaml
 (fun x:nat. iszero x) 0" |> parse |> typecheck bot;;
 - : ty = TBool
