@@ -15,6 +15,7 @@ let test_parse = [
   ("x y z w", App(App(App(Var "x",Var "y"),Var "z"),Var "w"));
   ("fun x:bool. x y z", Abs("x",TBool,App(App(Var "x",Var "y"),Var "z")));
   ("fun x:bool. fun y:nat. x y z", Abs("x",TBool,Abs("y",TNat,App(App(Var "x",Var "y"),Var "z"))));
+  ("fun x:nat->bool. x 0", Abs("x", TFun(TNat,TBool), App(Var "x",Zero)));
   ("fun x:bool. fun y:nat. fun z:bool->nat. x y z", Abs("x",TBool,Abs("y",TNat,Abs("z",TFun(TBool,TNat),App(App(Var "x",Var "y"),Var "z")))));
   ("(fun x:bool. x) (fun y:nat. y)", App(Abs("x",TBool,Var("x")),Abs("y",TNat,Var("y"))));
   ("(fun x:bool. x) (fun y:nat. y) (fun z:nat->bool. z)", App(App(Abs("x",TBool,Var("x")),Abs("y",TNat,Var("y"))),Abs("z",TFun(TNat,TBool),Var("z"))));
