@@ -61,7 +61,7 @@ let rec last = function
   | [x] -> x
   | _::l -> last l
 
-(* convert is_succ value to int *)
+(* convert nat values to int *)
 let rec int_of_nat = function
     Zero -> 0
   | Succ n -> 1 + int_of_nat n
@@ -71,7 +71,7 @@ let rec int_of_nat = function
 let weval_smallstep e = match last (trace e) with
     True -> Some (Bool true)
   | False -> Some (Bool false)
-  | e when is_succ e -> Some (Nat (int_of_nat e))
+  | e when is_nv e -> Some (Nat (int_of_nat e))
   | _ -> None
 
 let%test _ =
