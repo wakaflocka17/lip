@@ -59,9 +59,9 @@ fun x:nat. iszero x" |> parse |> typecheck bot;;
 
 Implement the **call-by-value** evaluation strategy, defined by the following rules:
 ```
-v ::= fun x . t | bv | nv           (values)
-bv ::= true | false
-nv ::= 0 | succ nv
+v ::= fun x . t | bv | nv       (values)
+bv ::= true | false             (bool values)
+nv ::= 0 | succ nv              (nat values)
 
 ------------------------------- [CBV-AppAbs]
 (fun x:T . t1) v2 -> [x -> v2] t1
