@@ -17,6 +17,11 @@ let tests = [
   ("if true then false else false or true",false);
 ];;
 
+
+(**********************************************************************
+ Test big-step semantics
+ **********************************************************************)
+
 let%test _ =
   print_newline();  
   print_endline ("*** Testing big-step semantics...");
@@ -33,17 +38,20 @@ let%test _ =
     true
     tests
 
+
+(**********************************************************************
+ Test small-step semantics
+ **********************************************************************)
+
 let rec last = function
     [] -> failwith "last on empty list"
   | [x] -> x
   | _::l -> last l
 
-let val_of_expr = function
+let eval_smallstep e = match last (trace e) with
     True -> Some true
   | False -> Some false
   | _ -> None
-
-let eval_smallstep e = val_of_expr (last (trace e))
 
 let%test _ =
   print_newline();  

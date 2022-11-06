@@ -1,17 +1,15 @@
 open ArithexprLib.Ast
 open ArithexprLib.Main
 
-(* wrapping results for testing *)
-
-type wexprval = Ok of exprval | Error
+type wexprval = exprval option
 
 let string_of_wval = function 
-    Ok v -> string_of_val v
+    Some v -> string_of_val v
   | _ -> "Error"
 
-let weval e = try Ok (eval e) 
-  with _ -> Error
-  
+let weval e = try Some (eval e)
+  with _ -> None
+
 let tests = [
   ("if true then true else false and false",Bool true);
   ("if true then false else false or true",Bool false);
@@ -21,15 +19,20 @@ let tests = [
   ("iszero pred succ 0 and not iszero succ pred succ 0", Bool true);
 ]
 
-let oktests = List.map (fun (x,y) -> (x,Ok y)) tests;;
+let oktests = List.map (fun (x,y) -> (x,Some y)) tests;;
 
 let errtests = [
-  ("iszero true", Error);
-  ("succ iszero 0", Error);
-  ("not 0", Error);
-  ("pred 0", Error);
-  ("pred pred succ 0", Error)
+  ("iszero true", None);
+  ("succ iszero 0", None);
+  ("not 0", None);
+  ("pred 0", None);
+  ("pred pred succ 0", None)
 ]
+
+
+(**********************************************************************
+ Test big-step semantics
+ **********************************************************************)
 
 let%test _ =
   print_newline();  
@@ -48,23 +51,28 @@ let%test _ =
     (oktests @ errtests)
 
 
+(**********************************************************************
+ Test small-step semantics
+ **********************************************************************)
+
+(* last element of a list *)
 let rec last = function
     [] -> failwith "last on empty list"
   | [x] -> x
   | _::l -> last l
 
+(* convert is_succ value to int *)
 let rec int_of_nat = function
     Zero -> 0
   | Succ n -> 1 + int_of_nat n
   | _ -> failwith "int_of_nat on non-nat"
-                
-let wval_of_expr = function
-    True -> Ok (Bool true)
-  | False -> Ok (Bool false)
-  | e when is_succ e -> Ok (Nat (int_of_nat e))
-  | _ -> Error
 
-let weval_smallstep e = wval_of_expr (last (trace e))
+(* reduce expression with small-step semantics and convert into value option *)
+let weval_smallstep e = match last (trace e) with
+    True -> Some (Bool true)
+  | False -> Some (Bool false)
+  | e when is_succ e -> Some (Nat (int_of_nat e))
+  | _ -> None
 
 let%test _ =
   print_newline();  
