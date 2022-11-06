@@ -51,8 +51,9 @@ Look [here](install-ocaml) for minimal instructions.
 
 ## Lambda-calculus
 
-1. Pure untyped lambda-calculus: [call-by-value semantics with explicit renaming of bound variables](lambda/untyped)
-1. Pure untyped lambda-calculus: [normal order semantics with explicit renaming of bound variables, and Church numerals](lambda/church)
+1. Pure untyped lambda calculus: [call-by-value semantics with explicit renaming of bound variables](lambda/untyped)
+1. Pure untyped lambda calculus: [normal order semantics with explicit renaming of bound variables, and Church numerals](lambda/church)
+1. Simply typed lambda calculus: [call-by-value semantics and static type checking](lambda/simplytyped)
 
 ## References
 
