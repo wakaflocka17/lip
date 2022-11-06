@@ -57,7 +57,8 @@ fun x:nat. iszero x" |> parse |> typecheck bot;;
 
 ## Small-step semantics
 
-Implement the **call-by-value** evaluation strategy, defined by the following rules:
+The call-by-value evaluation strategy extends that of the [untyped lambda calculus](../untyped/#small-step-semantics). 
+The base rules are the following rules:
 ```
 v ::= fun x . t | bv | nv       (values)
 bv ::= true | false             (bool values)
@@ -74,6 +75,9 @@ t2 -> t2'
 ------------------------------- [CBV-App2]
 v1 t2 -> v1 t2'
 ```
+Besides these rules, the semantics of the simply typed lambda calculus include rules
+for operating on the base types. These rules are similar to those given for the
+language of [arithmetic expressions](../../expr/arithexpr#small-step-semantics).
 
 Implement the call-by-value strategy as a function with the following type:
 ```ocaml
