@@ -54,3 +54,54 @@ For instance, we expect to have:
 fun x:nat. iszero x" |> parse |> typecheck bot;;
 - : ty = TFun (TNat, TBool)
 ```
+
+## Small-step semantics
+
+Implement the **call-by-value** evaluation strategy, defined by the following rules:
+```
+v ::= fun x . t | bv | nv           (values)
+bv ::= true | false
+nv ::= 0 | succ nv
+
+------------------------------- [CBV-AppAbs]
+(fun x:T . t1) v2 -> [x -> v2] t1
+
+t1 -> t1'
+------------------------------- [CBV-App1]
+t1 t2 -> t1' t2
+
+t2 -> t2'
+------------------------------- [CBV-App2]
+v1 t2 -> v1 t2'
+```
+
+Implement the call-by-value strategy as a function with the following type:
+```ocaml
+trace : term -> term list
+```
+Note that, unlike in the [untyped lambda-calculus](../untyped), the well-typed terms of the simply typed lambda calculus 
+always terminate into a value. 
+Therefore, there is no need for using feeding `trace` with the number of steps.
+
+
+## Frontend and testing
+
+Run the frontend with the commands:
+```
+dune exec simplytyped trace
+dune exec simplytyped typecheck
+```
+For instance, we should obtain:
+```
+dune exec simplytyped typecheck
+(fun x:bool. fun y:bool. x and y) true true
+bool
+
+dune exec simplytyped trace
+(fun x:bool. fun y:bool. x and y) true true
+((fun x : bool . fun y : bool . x and y) (true)) (true)
+ -> (fun y : bool . true and y) (true)
+ -> true and true
+ -> true
+```
+
