@@ -14,6 +14,3 @@ type term =
   | Succ of term
   | Pred of term
   | IsZero of term
-          
-
-
