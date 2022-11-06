@@ -26,7 +26,7 @@ Note that, unlike in the [untyped lambda-calculus](../untyped), in the simply ty
 ```ocaml
 type ty = TBool | TNat | TFun of ty * ty
 ```
-where the type `TBool` represents booleans, the type is for `TNat` naturals, and `TFun` for function types.
+where the type `TBool` represents booleans, `TNat` is for naturals, and `TFun` for function types.
 For instance, the term:
 ```ocaml
 fun f: nat->bool. f 0
