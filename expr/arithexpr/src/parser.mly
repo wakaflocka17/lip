@@ -7,26 +7,24 @@ open Ast
 %token NOT
 %token AND
 %token OR
-%token LPAREN
-%token RPAREN
 %token IF
 %token THEN
 %token ELSE
+%token ZERO
+%token SUCC
+%token PRED
+%token ISZERO
+%token LPAREN
+%token RPAREN
 %token EOF
 
-(* ELSE is not associative *)
 %nonassoc ELSE
-
-(* OR is left associative has the priority over ELSE *)
 %left OR
-
-(* AND is left associative and has the priority over OR *)
 %left AND
+%left NOT
+%nonassoc SUCC, PRED, ISZERO
 
-(* NOT is right associative has the highest priority *)
-%right NOT
-
-%start <boolExpr> prog
+%start <expr> prog
 
 %%
 
@@ -41,5 +39,9 @@ expr:
   | e1=expr; AND; e2=expr { And(e1,e2) }
   | e1=expr; OR; e2=expr { Or(e1,e2) }
   | IF; e1 = expr; THEN; e2 = expr; ELSE; e3 = expr; { If(e1, e2, e3) }
+  | ZERO { Zero }
+  | SUCC; e = expr { Succ(e) }
+  | PRED; e = expr { Pred(e) }
+  | ISZERO; e = expr { IsZero(e) }
   | LPAREN; e=expr; RPAREN {e}
 ;
