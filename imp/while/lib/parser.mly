@@ -29,6 +29,7 @@ open Ast
 %token EOF
 
 %left SEQ
+%nonassoc ELSE DO
 %left OR
 %left AND
 %nonassoc NOT
