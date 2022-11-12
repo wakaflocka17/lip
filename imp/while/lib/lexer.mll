@@ -2,7 +2,7 @@
 open Parser
 }
 
-let white = [' ' '\t']+
+let white = [' ' '\n' '\t']+
 let letter = ['a'-'z' 'A'-'Z']
 let chr = ['a'-'z' 'A'-'Z' '0'-'9']
 let id = letter chr*
@@ -20,6 +20,7 @@ rule read =
   | "or" { OR }
   | "+" { PLUS }
   | "-" { MINUS }
+  | "*" { MUL }  
   | "=" { EQ }
   | "<=" { LEQ }    
   | "skip" { SKIP }

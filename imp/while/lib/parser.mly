@@ -9,6 +9,7 @@ open Ast
 %token OR
 %token PLUS
 %token MINUS
+%token MUL
 %token EQ
 %token LEQ
 %token <string> ID
@@ -27,10 +28,13 @@ open Ast
 %token RPAREN
 %token EOF
 
+%left SEQ
 %left OR
 %left AND
-%left NOT
-%left SEQ
+%nonassoc NOT
+%left EQ LEQ
+%left PLUS MINUS
+%left MUL
 
 %start <cmd> prog
 
@@ -50,6 +54,7 @@ expr:
   | e1=expr; OR; e2=expr { Or(e1,e2) }
   | e1=expr; PLUS; e2=expr { Add(e1,e2) }
   | e1=expr; MINUS; e2=expr { Sub(e1,e2) }
+  | e1=expr; MUL; e2=expr { Mul(e1,e2) }
   | e1=expr; EQ; e2=expr { Eq(e1,e2) }
   | e1=expr; LEQ; e2=expr { Leq(e1,e2) }
   | LPAREN; e=expr; RPAREN { e }

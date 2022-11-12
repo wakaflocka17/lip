@@ -10,6 +10,7 @@ type expr =
   | Or of expr * expr
   | Add of expr * expr
   | Sub of expr * expr
+  | Mul of expr * expr
   | Eq of expr * expr
   | Leq of expr * expr
 

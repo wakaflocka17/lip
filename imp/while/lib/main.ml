@@ -18,14 +18,15 @@ let rec string_of_expr = function
   | Not e -> "not " ^ string_of_expr e
   | And(e1,e2) -> string_of_expr e1 ^ " and " ^ string_of_expr e2
   | Or(e1,e2) -> string_of_expr e1 ^ " or " ^ string_of_expr e2
-  | Add(e1,e2) -> string_of_expr e1 ^ " + " ^ string_of_expr e2
-  | Sub(e1,e2) -> string_of_expr e1 ^ " + " ^ string_of_expr e2
-  | Eq(e1,e2) -> string_of_expr e1 ^ " = " ^ string_of_expr e2
-  | Leq(e1,e2) -> string_of_expr e1 ^ " <= " ^ string_of_expr e2
+  | Add(e1,e2) -> string_of_expr e1 ^ "+" ^ string_of_expr e2
+  | Sub(e1,e2) -> string_of_expr e1 ^ "-" ^ string_of_expr e2
+  | Mul(e1,e2) -> string_of_expr e1 ^ "*" ^ string_of_expr e2
+  | Eq(e1,e2) -> string_of_expr e1 ^ "=" ^ string_of_expr e2
+  | Leq(e1,e2) -> string_of_expr e1 ^ "<=" ^ string_of_expr e2
   
 let rec string_of_cmd = function
     Skip -> "skip"
-  | Assign(x,e) -> x ^ " := " ^ string_of_expr e
+  | Assign(x,e) -> x ^ ":=" ^ string_of_expr e
   | Seq(c1,c2) -> string_of_cmd c1 ^ "; " ^ string_of_cmd c2
   | If(e,c1,c2) -> "if " ^ string_of_expr e ^ " then " ^ string_of_cmd c1 ^ " else " ^ string_of_cmd c2
   | While(e,c) -> "while " ^ string_of_expr e ^ " do " ^ string_of_cmd c
@@ -34,8 +35,8 @@ let rec string_of_state_rec s dom = match dom with
     [] -> ""
   | [x] -> (try x ^ "=" ^ string_of_val (s x)
             with _ -> "")
-  | x::dom' -> (try x ^ "=" ^ string_of_val (s x) ^ ","
-                with _ -> "") ^ string_of_state_rec s dom'
+  | x::dom' -> (try x ^ "=" ^ string_of_val (s x) ^ "," ^ string_of_state_rec s dom'
+                with _ -> string_of_state_rec s dom') 
 
 let string_of_state s dom = "[" ^ string_of_state_rec s dom ^ "]"
 
@@ -53,6 +54,7 @@ let rec vars_of_expr = function
   | Or(e1,e2) 
   | Add(e1,e2)
   | Sub(e1,e2)
+  | Mul(e1,e2)      
   | Eq(e1,e2) 
   | Leq(e1,e2) -> union (vars_of_expr e1) (vars_of_expr e2)
   
@@ -112,6 +114,10 @@ let rec eval_expr st = function
         (Nat n1,Nat n2) when n1>=n2 -> Nat(n1 - n2)
       | _ -> raise (TypeError "Sub")
     )
+  | Mul(e1,e2) -> (match (eval_expr st e1,eval_expr st e2)  with
+        (Nat n1,Nat n2) -> Nat(n1 * n2)
+      | _ -> raise (TypeError "Add")
+    )        
   | Eq(e1,e2) -> (match (eval_expr st e1,eval_expr st e2)  with
         (Nat n1,Nat n2) -> Bool(n1 = n2)
       | _ -> raise (TypeError "Eq")

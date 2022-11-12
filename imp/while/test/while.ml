@@ -6,7 +6,8 @@ open WhileLib.Main
  **********************************************************************)
 
 let test_parse = [
-  ("x := 0", Assign("x",Const(0)));
+  ("x:=0", Assign("x",Const(0)));
+  ("x:=0; y:=x+1", Seq(Assign("x",Const(0)),Assign("y",Add(Var("x"),Const(1)))));  
 ]
 
 let%test _ =
@@ -34,6 +35,11 @@ let test_trace = [
   ("x:=0; if x=0 then y:=1 else y:=2", 3, "y", Nat 1);
   ("x:=1; if x=0 then y:=1 else y:=2", 3, "y", Nat 2);
   ("x:=3; y:=2; r:=0; while 1<=y do (r:=r+x; y:=y-1)", 10, "r", Nat 6);
+  ("x:=3; while 0<=x do x:=x-1; x:=5", 10, "x", Nat 5);
+  ("x:=5; y:=3; if x<=y then min:=x else min:=y", 10, "min", Nat 3);
+  ("x:=1; y:=2; z:=3; if x<=y and x<=z then min:=x else (if y<=z then min:=y else min:=z)", 10, "min", Nat 1);
+  ("x:=2; y:=1; z:=3; if x<=y and x<=z then min:=x else (if y<=z then min:=y else min:=z)", 10, "min", Nat 1);
+  ("x:=2; y:=3; z:=1; if x<=y and x<=z then min:=x else (if y<=z then min:=y else min:=z)", 10, "min", Nat 1);          
 ]
               
 let%test _ =
