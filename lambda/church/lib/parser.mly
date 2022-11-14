@@ -16,6 +16,8 @@
 %token SND
 %token <string> NAT
 %token SCC
+%token PRD
+%token ADD
 %token LPAREN
 %token RPAREN
 %token EOF
@@ -23,7 +25,7 @@
 %start <term> prog
 
 %nonassoc DOT ABS
-%nonassoc LPAREN ID OMEGA VAR TRU FLS IFT AND PAIR FST SND NAT SCC
+%nonassoc LPAREN ID OMEGA VAR TRU FLS IFT AND PAIR FST SND NAT SCC PRD ADD
 %left APP
 
 
@@ -48,5 +50,7 @@ term:
   | FST { t_fst }
   | SND { t_snd }
   | SCC { t_scc }
+  | PRD { t_prd }
+  | ADD { t_add }
   | n = NAT { t_nat(int_of_string n) }
 ;

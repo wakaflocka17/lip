@@ -24,6 +24,8 @@ rule read =
   | "fst" { FST }
   | "snd" { SND }
   | "scc" { SCC }    
+  | "prd" { PRD }
+  | "add" { ADD }      
   | var { VAR (Lexing.lexeme lexbuf) }
   | num { NAT (Lexing.lexeme lexbuf) }  
   | "." { DOT }

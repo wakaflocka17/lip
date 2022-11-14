@@ -122,7 +122,9 @@ let rec string_of_term = function
   | t when equiv t t_pair -> "pair"
   | t when equiv t t_fst -> "fst"
   | t when equiv t t_snd -> "snd"
-  | t when equiv t t_scc -> "scc"    
+  | t when equiv t t_scc -> "scc"
+  | t when equiv t t_add -> "add"   
+  | t when equiv t t_prd -> "prd"
   | t when nat_of_term t (size t) <> None
     -> (match nat_of_term t (size t) with
           Some n -> string_of_int n
