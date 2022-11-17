@@ -2,9 +2,10 @@
 
 Extend the [pure untyped lambda calculus](../untyped) with the following combinators:
 
-**Identity**
+**Identity and Omega**
 ```
 id = fun x. x
+omega = fun x. x x
 ```
 
 **Church booleans**
