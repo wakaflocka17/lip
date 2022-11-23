@@ -29,9 +29,9 @@ type cmd =
 Use the following types to represent the values of expressions,
 and the configurations of the small-step semantics:
 ```ocaml
-type exprval = Bool of bool | Nat of int
-type state = ide -> exprval
-type conf = St of state | Cmd of cmd * state
+type exprval = Bool of bool | Nat of int        (* value of an expression *)
+type state = ide -> exprval                     (* state = map from identifiers to expression values *)
+type conf = St of state | Cmd of cmd * state    (* configuration = state | (command,state) *)
 ```
 
 ## Pretty printing
@@ -55,7 +55,7 @@ string_of_trace : ide list -> conf list -> string
 
 Define the semantics of expressions in a big-step style:
 ```ocaml
-eval_expr state -> expr -> exprval
+eval_expr : state -> expr -> exprval
 ```
 
 Define the semantics of commands in a small-step style:
@@ -74,9 +74,9 @@ which has not been initialized, as in the following command:
 y := x+1
 ```
 Instead, the exception `NoRuleApplies` is raised when the configuration
-can no longer be reduces, i.e. it is already in state tagged `St`.
+can no longer be reduced, i.e. it is already in state tagged `St`.
 
-Define a function:
+Finally, define a function:
 ```ocaml
 trace : int -> cmd -> term list
 ```
