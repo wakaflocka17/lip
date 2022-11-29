@@ -1,4 +1,6 @@
 open WhileLib.Ast
+open WhileLib.Types
+open WhileLib.Prettyprint       
 open WhileLib.Main
 
 (**********************************************************************

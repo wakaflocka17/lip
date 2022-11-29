@@ -26,7 +26,12 @@ open Ast
 
 %token LPAREN
 %token RPAREN
+%token LBRACE
+%token RBRACE
 %token EOF
+
+%token INT
+%token BOOL
 
 %left SEQ
 %nonassoc ELSE DO
@@ -61,10 +66,15 @@ expr:
   | LPAREN; e=expr; RPAREN { e }
 ;
 
+decl:
+  | INT; x = ID; SEQ; d=decl; { IntVar(x,d) }
+  | BOOL; x = ID; SEQ; d=decl; { BoolVar(x,d) }
+  | { EmptyDecl }
+
 cmd:
   | SKIP { Skip }
   | IF; e0 = expr; THEN; c1 = cmd; ELSE; c2 = cmd; { If(e0,c1,c2) }
   | WHILE; e = expr; DO; c = cmd; { While(e,c) }
   | x = ID; TAKES; e=expr; { Assign(x,e) }
   | c1 = cmd; SEQ; c2 = cmd; { Seq(c1,c2) }
-  | LPAREN; c=cmd; RPAREN { c }
+  | LBRACE d = decl; c = cmd; RBRACE { Decl(d,c) }
