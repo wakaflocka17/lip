@@ -1,6 +1,6 @@
 # Imperative language with blocks
 
-Abstract syntax:
+Implement an imperative language with blocks of declarations, with the following abstract syntax:
 ```ocaml
 type ide = string
   
