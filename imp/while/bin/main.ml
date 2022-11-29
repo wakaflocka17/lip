@@ -1,5 +1,7 @@
+open WhileLib.Types
+open WhileLib.Prettyprint       
 open WhileLib.Main
-  
+
 (* read file, and output it to a string *)
 
 let read_file filename =
