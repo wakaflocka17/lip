@@ -1,2 +1,4 @@
 open DebruijnLib.Main;;
 open DebruijnLib.Ast;;
+
+let test_db_of_term t = string_of_dbterm (dbterm_of_namedterm (parse t));;

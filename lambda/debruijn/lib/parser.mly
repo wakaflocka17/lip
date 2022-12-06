@@ -9,7 +9,7 @@ open Ast
 %token RPAREN
 %token EOF
 
-%start <term> prog
+%start <named_term> prog
 
 %nonassoc DOT ABS
 %nonassoc LPAREN VAR 
@@ -22,8 +22,8 @@ prog:
 ;
 
 term:
-  | x = VAR { Var x }
-  | ABS; x = VAR; DOT; t = term { Abs(x,t) }
+  | x = VAR { NamedVar x }
+  | ABS; x = VAR; DOT; t = term { NamedAbs(x,t) }
   | LPAREN; t=term; RPAREN { t }
-  | t1=term; t2=term { App(t1,t2) } %prec APP
+  | t1=term; t2=term { NamedApp(t1,t2) } %prec APP
 ;
