@@ -9,7 +9,7 @@ open Ast
 %token RPAREN
 %token EOF
 
-%start <named_term> prog
+%start <namedterm> prog
 
 %nonassoc DOT ABS
 %nonassoc LPAREN VAR 

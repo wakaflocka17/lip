@@ -1,9 +1,9 @@
-type named_term =
+type namedterm =
     NamedVar of string
-  | NamedAbs of string * named_term
-  | NamedApp of named_term * named_term
+  | NamedAbs of string * namedterm
+  | NamedApp of namedterm * namedterm
 
-type db_term =
+type dbterm =
     DBVar of int
-  | DBAbs of db_term
-  | DBApp of db_term * db_term
+  | DBAbs of dbterm
+  | DBApp of dbterm * dbterm
