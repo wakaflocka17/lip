@@ -38,6 +38,13 @@ let bind f x k = fun s -> if x = s then k else f s
    free variables to De Bruijn indexes. Yields the corresponding n-term, where 
    n is the number of free variables present in t, namely the size of dom(c) *)
 let dbterm_of_namedterm c t =
+  let rec depth_of_term = function
+    | NamedVar _ -> 0
+    | NamedAbs(_,t) -> 1 + depth_of_term t
+    | NamedApp(t1,t2) -> max (depth_of_term t1) (depth_of_term t2)
+  in
+
+  let depth = depth_of_term t in
 
   (* Helper function that carries:
      An environment env to keep track of the absolute position of each binder 
@@ -53,7 +60,7 @@ let dbterm_of_namedterm c t =
       (* If the name is not bound by an abstraction then it must be free;
        get its value from the context and shift it outside the bound region *)
       with
-        UnboundVar -> c x + d
+        UnboundVar -> c x + depth
     )
 
     (* Each abstraction is one level of depth lower than its body. The bound
