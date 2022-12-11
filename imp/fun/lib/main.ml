@@ -68,7 +68,7 @@ let rec trace1_expr st = function
   | CallExec(c,e) -> (match trace1_cmd (Cmd(c,st)) with
       St st' -> (CallRet(e),st')
     | Cmd(c',st') -> (CallExec(c',e),st'))
-  | CallRet(Const(n)) -> (Const(n),st)
+  | CallRet(Const(n)) -> let st' = (popenv st, getmem st, getloc st) in (Const(n),st')
   | CallRet(e) -> let (e',st') = trace1_expr st e in (CallRet(e'),st')
   | _ -> raise NoRuleApplies
 
