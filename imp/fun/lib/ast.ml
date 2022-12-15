@@ -13,9 +13,9 @@ type expr =
   | Mul of expr * expr
   | Eq of expr * expr
   | Leq of expr * expr
-  | Call of ide * expr
-  | CallExec of cmd * expr (* CallExec(c,e): c is the cmd being reduced, e is the return expr *)
-  | CallRet of expr        (* CallRet(e): e is the return expr *)
+  | Call of ide * expr     
+  | CallExec of cmd * expr (* Runtime only: c is the cmd being reduced, e is the return expr *)
+  | CallRet of expr        (* Runtime only: e is the return expr *)
               
 and cmd =
   | Skip
