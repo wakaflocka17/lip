@@ -87,3 +87,9 @@ let dbterm_of_namedterm_auto t =
   let context = fzip fv (List.rev (List.init (List.length fv) (fun x -> x)))
 
   in dbterm_of_namedterm context t 
+
+(* shift d c t is the d-place shift of a term t above cutoff *)
+let rec shift d c = function
+  | DBVar k -> DBVar (if k < c then k else k+d)
+  | DBAbs t -> DBAbs (shift d (c+1) t)
+  | DBApp(t1,t2) -> DBApp(shift d c t1, shift d c t2)
