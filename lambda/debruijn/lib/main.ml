@@ -18,44 +18,38 @@ exception UnboundVar
 
 let bind f x k = fun s -> if x = s then k else f s
 
-(* Nameless representation of a named term t using an arbitrary mapping c of its
-   free variables to De Bruijn indexes. Yields the corresponding n-term, where 
-   n is the number of free variables present in t, namely the size of dom(c) *)
-let dbterm_of_namedterm c t =
-  let rec depth_of_term = function
-    | NamedVar _ -> 0
-    | NamedAbs(_,t) -> 1 + depth_of_term t
-    | NamedApp(t1,t2) -> max (depth_of_term t1) (depth_of_term t2)
-  in
+(* removenames c t is the ameless representation of a named term t using an 
+   arbitrary mapping c of its free variables to De Bruijn indexes. Yields the 
+   corresponding n-term, where n is the number of free variables present in t, 
+   namely the size of dom(c) 
+*)
+let removenames gamma t =
+  let rec walk env depth = function
 
-  let depth = depth_of_term t in
+    | NamedVar x -> DBVar (
+      try
+      (* x was previously bound: its index equals the depth level of its binder 
+         as recorded in the environment minus the number of enclosing lambda-
+         abstractions crossed so far. *)
+        depth - env x
 
-  (* Helper function that carries:
-     An environment env to keep track of the absolute position of each binder 
-     hhe distance d from the outer-most enclosing binder *)
-  let rec helper env d = function
-
-    | NamedVar x -> DBVar(try
-      (* The k-th enclosing binder (from right to left) for the name x equates 
-         to: How many enclosing binders have I met? - When was this name bound?
-         The most recently bound names get the smaller values *)
-        d - env x
-
-      (* If the name is not bound by an abstraction then it must be free;
-       get its value from the context and shift it outside the bound region *)
       with
-        UnboundVar -> c x + depth
+      (* x occurs free: shift its index obtained by the context to reflect
+         the current one where d enclosing abstractions have been crossed. *)
+        UnboundVar -> gamma x + d
     )
 
     (* Each abstraction is one level of depth lower than its body. The bound
        name is mapped to the current depth (starting from 1) *)
-    | NamedAbs(x,u) -> DBAbs(helper (bind env x (d+1)) (d+1) u)
-    | NamedApp(u,v) -> DBApp(helper env d u, helper env d v) 
+    | NamedAbs(x,u) -> DBAbs(walk (bind env x (d+1)) (d+1) u)
+    
+    | NamedApp(u,v) -> DBApp(walk env d u, walk env d v) 
   
-  in helper (fun _ -> raise UnboundVar) 0 t
+    
+  in walk (fun _ -> raise UnboundVar) 0 t
 
 (* Nameless representation of a named term t using a default context *)
-let dbterm_of_namedterm_auto t =
+let removenames_auto t =
   let fv = free_vars t in
 
   (* Functional zip of two lists of equal size.
@@ -70,7 +64,7 @@ let dbterm_of_namedterm_auto t =
      increasing index to each one of them, right to left, starting from 0 *)
   let context = fzip fv (List.rev (List.init (List.length fv) (fun x -> x)))
 
-  in dbterm_of_namedterm context t 
+  in removenames context t 
 
 (* shift d c t is the d-place shift of a term t above cutoff *)
 let rec shift d c = function
