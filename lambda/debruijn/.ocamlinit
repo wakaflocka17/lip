@@ -1,5 +1,6 @@
 open DebruijnLib.Main;;
 open DebruijnLib.Ast;;
 open DebruijnLib.Prettyprint;;
+open DebruijnLib.Help;;
 
-let test_dbrep t = string_of_dbterm (removenames_auto (parse t));;
+let test_dbrep t = string_of_dbterm (removenames (parse t));;
