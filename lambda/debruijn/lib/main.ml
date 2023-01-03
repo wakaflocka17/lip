@@ -11,9 +11,9 @@ let parse (s : string) : namedterm =
 
 
 let rec free_vars = function
-  | NamedVar x -> [x]
-  | NamedAbs(x,t) -> List.filter ((<>) x) (free_vars t)
-  | NamedApp(t1,t2) -> (free_vars t1) @! (free_vars t2)
+  | NamedVar x -> StringSet.singleton x
+  | NamedAbs(x,t) -> StringSet.remove x (free_vars t)
+  | NamedApp(t1,t2) -> StringSet.union (free_vars t1) (free_vars t2)
 
 
 (* removenames1 c t is the nameless representation of a named term t using an 
@@ -52,7 +52,7 @@ let removenames t =
 
   (* Establish a naming context for the free variables of t by assigning an
      increasing index to each one of them, right to left, starting from 0 *)
-  let context = fzip fv (range 0 (List.length fv))
+  let context = fzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
 
   in removenames1 context t 
 
