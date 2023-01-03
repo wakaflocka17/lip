@@ -57,8 +57,21 @@ let removenames t =
   in removenames1 context t 
 
 
-(* shift d c t is the d-place shift of a term t above cutoff *)
-let rec shift d c = function
+(* shift d c t is the d-place shift of a term t above cutoff c *)
+let shift d t =
+  let rec walk c = function
   | DBVar k -> DBVar (if k < c then k else k+d)
-  | DBAbs t -> DBAbs (shift d (c+1) t)
-  | DBApp(t1,t2) -> DBApp(shift d c t1, shift d c t2)
+  | DBAbs t1 -> DBAbs (walk (c+1) t1)
+  | DBApp(t1,t2) -> DBApp(walk c t1, walk c t2)
+
+  in walk 0 t
+
+
+(* subst j s t is the De Bruijn term [j -> s] t *)
+let subst j s t =
+  let rec walk c = function
+  | DBVar k -> if k = j+c then s else DBVar k
+  | DBAbs t1 -> DBAbs (walk (c+1) t1)
+  | DBApp(t1,t2) -> DBApp(walk c t1, walk c t2)
+
+  in walk 0 t
