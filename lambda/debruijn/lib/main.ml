@@ -71,7 +71,7 @@ let shift d t =
 (* subst j s t is the De Bruijn term [j -> s] t *)
 let subst j s t =
   let rec walk c = function
-  | DBVar k -> if k = j+c then s else DBVar k
+  | DBVar k -> if k = j+c then shift c s else DBVar k
   | DBAbs t1 -> DBAbs (walk (c+1) t1)
   | DBApp(t1,t2) -> DBApp(walk c t1, walk c t2)
 
