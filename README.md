@@ -2,7 +2,7 @@
 
 LiP students are expected to fork the repository and push solutions to the exercises on their fork.
 
-Invitation to the Discord server: **https://discord.gg/hnzhuVv9** (expires on November 8th, 2022)
+Invitation to the Discord server: **https://discord.gg/CW84hS82**
 
 ## Ocaml basics #1
 
@@ -54,6 +54,12 @@ Look [here](install-ocaml) for minimal instructions.
 1. Pure untyped lambda calculus: [call-by-value semantics with explicit renaming of bound variables](lambda/untyped)
 1. Pure untyped lambda calculus: [normal order semantics with explicit renaming of bound variables, and Church numerals](lambda/church)
 1. Simply typed lambda calculus: [call-by-value semantics and static type checking](lambda/simplytyped)
+
+## Imperative languages
+
+1. [A simple imperative language](imp/while)
+1. [Declaration blocks](imp/blocks)
+1. [Functions](imp/fun)
 
 ## References
 
