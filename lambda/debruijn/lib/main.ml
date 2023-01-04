@@ -68,11 +68,45 @@ let shift d t =
   in walk 0 t
 
 
-(* subst j s t is the De Bruijn term [j -> s] t *)
+(* subst j s t is the substitution of [j -> s] t
+
+   Substitution usually takes place inside of abstractions, thus the correct way
+   to substitute s = 0 1 for the variable bound by the outermost λ in t = λ.λ.1 
+   would be [0 -> 0 1] (λ.1) rather than [0 -> 0 1] (λ.λ.1), as the latter
+   doesn't take into account the fact that j already points to a binder 
+   (the leftmost λ in t) outside its body (λ.1).
+*)
 let subst j s t =
   let rec walk c = function
+  (* s is shifted by the number of abstractions crossed to reflect the context
+     in which it is substituted, that of the term t *)
   | DBVar k -> if k = j+c then shift c s else DBVar k
   | DBAbs t1 -> DBAbs (walk (c+1) t1)
   | DBApp(t1,t2) -> DBApp(walk c t1, walk c t2)
 
   in walk 0 t
+
+
+let isval = function DBAbs _ -> true | _ -> false
+
+let substTop s t = shift (-1) (subst 0 (shift 1 s) t)
+
+exception NoRuleApplies
+
+let rec trace1 = function
+  | DBApp(DBAbs t12,v2) when isval v2 -> substTop v2 t12
+  | DBApp(v1,t2) when isval v1 -> DBApp(v1,trace1 t2)
+  | DBApp(t1,t2) -> DBApp(trace1 t1,t2)
+  | DBAbs t -> trace1 t
+  | _ -> raise NoRuleApplies
+
+let rec trace n t =
+  if n<=0 then [t]
+  else try
+      let t' = trace1 t
+      in t::(trace (n-1) t')
+    with NoRuleApplies -> [t]
+
+
+
+ 
