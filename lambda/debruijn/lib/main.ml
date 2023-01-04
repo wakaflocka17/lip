@@ -1,8 +1,6 @@
 open Ast
 open Help
 
-exception UnboundVar
-
 
 let parse (s : string) : namedterm =
   let lexbuf = Lexing.from_string s in
@@ -16,33 +14,36 @@ let rec free_vars = function
   | NamedApp(t1,t2) -> StringSet.union (free_vars t1) (free_vars t2)
 
 
-(* removenames1 c t is the nameless representation of a named term t using an 
-   arbitrary mapping c of its free variables to De Bruijn indexes. Yields the 
-   corresponding n-term, where n is the number of free variables present in t, 
-   namely the size of dom(c) *)
-let removenames1 gamma t =
-  let rec walk env depth = function
-    | NamedVar x -> DBVar (
-      try
-      (* x was previously bound: its index equals the depth level of its binder 
-         as recorded in the environment minus the number of enclosing lambda-
-         abstractions crossed so far. *)
-        depth - env x
+let shiftContext d c ctx = StringMap.map
+  (fun v -> if v < c then v else v+d) ctx
 
-      with
-      (* x occurs free: shift its index obtained by the context to reflect
-         the current one where d enclosing abstractions have been crossed. *)
-        UnboundVar -> gamma x + depth
-    )
+
+(* removenames1 ctx t is the nameless representation of a named term t using
+   de Bruin indexes: the index k represent the variable bound by the k-th
+   enclosing binder. ctx is a context in which free variables are assigned
+   arbitrary indexes. *)
+let removenames1 gamma t =
+  let rec walk c = function
+    | NamedVar x -> DBVar (StringMap.find x c)
+    | NamedAbs(x,u) -> DBAbs(walk (StringMap.add x 0 (shiftContext 1 0 c)) u)
+    | NamedApp(u,v) -> DBApp(walk c u, walk c v) 
+  
+  in walk gamma t
+
+(* removenames2 ctx t is the nameless representation of a named term t using 
+   de Bruijn levels: bound variables are numbered from the outside in. *)
+let removenames2 gamma t =
+  let rec walk c depth = function
+    | NamedVar x -> DBVar (StringMap.find x c)
 
     (* Each abstraction is one level of depth lower than its body. The bound
-       name is mapped to the current depth (starting from 1) *)
-    | NamedAbs(x,u) -> DBAbs(walk (bind env x (depth+1)) (depth+1) u)
+       name is mapped to the current depth (starting from 0) *)
+    | NamedAbs(x,u) -> DBAbs(walk 
+      (StringMap.add x depth (shiftContext 1 depth c)) (depth+1) u)
     
-    | NamedApp(u,v) -> DBApp(walk env depth u, walk env depth v) 
+    | NamedApp(u,v) -> DBApp(walk c depth u, walk c depth v) 
   
-    
-  in walk (fun _ -> raise UnboundVar) 0 t
+  in walk gamma 0 t
 
 
 (* removenames t is the nameless representation of a named term t using a 
@@ -52,7 +53,7 @@ let removenames t =
 
   (* Establish a naming context for the free variables of t by assigning an
      increasing index to each one of them, right to left, starting from 0 *)
-  let context = fzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
+  let context = mzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
 
   in removenames1 context t 
 
