@@ -40,11 +40,12 @@ let%test _ =
   print_endline ("*** Testing parse...");
   List.fold_left
     (fun b (ts,t) ->
-       print_string ts;
-       let b' = (parse ts) = t in
-       print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_dbterm t ^ "]"));
-       print_newline();
-       b && b')
+      let ts' = parse ts in
+      print_string (ts ^ " => " ^ string_of_dbterm ts');
+      let b' = ts' = t in
+      print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_dbterm t ^ "]"));
+      print_newline();
+      b && b')
     true
     test_parse
 

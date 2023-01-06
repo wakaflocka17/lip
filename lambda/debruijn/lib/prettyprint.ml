@@ -14,6 +14,7 @@ let rec string_of_dbterm = function
   | DBApp(t1,DBApp(t21,t22)) -> string_of_dbterm t1 ^ " (" ^ string_of_dbterm (DBApp(t21,t22)) ^ ")"
   | DBApp(DBAbs t1,DBVar n) -> "(" ^ string_of_dbterm (DBAbs t1) ^ ") " ^  string_of_int n 
   | DBApp(DBAbs t1,t2) -> "(" ^ string_of_dbterm (DBAbs t1) ^ ") (" ^ string_of_dbterm t2 ^ ")" 
+  | DBApp(t1,DBAbs t21) -> string_of_dbterm t1 ^ " (" ^ string_of_dbterm (DBAbs t21) ^ ")"
   | DBApp(t1,t2) -> string_of_dbterm t1 ^ " " ^ string_of_dbterm t2
 
 let string_of_trace = function
