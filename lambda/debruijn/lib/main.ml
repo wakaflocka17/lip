@@ -2,7 +2,7 @@ open Ast
 open Help
 
 
-let parse (s : string) : namedterm =
+let parse1 (s : string) : namedterm =
   let lexbuf = Lexing.from_string s in
   let ast = Parser.prog Lexer.read lexbuf in
   ast
@@ -56,7 +56,10 @@ let removenames t =
      increasing index to each one of them, right to left, starting from 0 *)
   let context = mzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
 
-  in removenames1 context t 
+  in removenames1 context t
+
+
+let parse (s : string) : dbterm = removenames (parse1 s)
 
 
 (* shift d c t is the d-place shift of a term t above cutoff c *)
