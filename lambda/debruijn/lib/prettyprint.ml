@@ -15,3 +15,8 @@ let rec string_of_dbterm = function
   | DBApp(DBAbs t1,DBVar n) -> "(" ^ string_of_dbterm (DBAbs t1) ^ ") " ^  string_of_int n 
   | DBApp(DBAbs t1,t2) -> "(" ^ string_of_dbterm (DBAbs t1) ^ ") (" ^ string_of_dbterm t2 ^ ")" 
   | DBApp(t1,t2) -> string_of_dbterm t1 ^ " " ^ string_of_dbterm t2
+
+let string_of_trace = function
+  | [] -> ""
+  | t0::ts ->  string_of_dbterm t0 ^ "\n" ^
+  List.fold_right (fun t acc -> "-> " ^ string_of_dbterm t ^ "\n" ^ acc) ts ""
