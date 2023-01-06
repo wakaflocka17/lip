@@ -53,12 +53,15 @@ let plusone = "(" ^ plus ^ ") (" ^ c1 ^ ")"
 let c3 = "(" ^ plusone ^ ") (" ^ c2 ^ ")"
 let c4 = "(" ^ plus ^ ") (" ^ c2 ^ ") (" ^ c2 ^ ")"
 
+let omega = "(fun x. x x) (fun x. x x)"
+
 let test_trace = [
   ("(fun x. y x z) (fun x. x)",1,"y (fun c. c) z");
   ("(fun u. fun v. u x) y",10,"fun v. y x");
   (plusone,1,"fun n. fun s. fun z. (fun s. fun z. s z) s (n s z)");
   (c3,10,"fun s. fun z. s (s (s z))");
-  (c4,10,"fun s. fun z. s (s (s (s z)))")
+  (c4,10,"fun s. fun z. s (s (s (s z)))");
+  (omega,5,omega)
 ]
 
 let rec last = function
