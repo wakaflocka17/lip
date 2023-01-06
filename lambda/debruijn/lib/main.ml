@@ -30,6 +30,7 @@ let removenames1 gamma t =
   
   in walk gamma t
 
+
 (* removenames2 ctx t is the nameless representation of a named term t using 
    de Bruijn levels: bound variables are numbered from the outside in. *)
 let removenames2 gamma t =
@@ -94,10 +95,11 @@ let substTop s t = shift (-1) (subst 0 (shift 1 s) t)
 exception NoRuleApplies
 
 let rec trace1 = function
-  | DBApp(DBAbs t12,v2) when isval v2 -> substTop v2 t12
+  | DBAbs t -> DBAbs (trace1 t) (* reduce redexes inside abstractions *)
+  | DBApp(DBAbs t12,v2) -> substTop v2 t12
   | DBApp(v1,t2) when isval v1 -> DBApp(v1,trace1 t2)
+  | DBApp(DBVar k,t2) -> DBApp(DBVar k,trace1 t2)
   | DBApp(t1,t2) -> DBApp(trace1 t1,t2)
-  | DBAbs t -> trace1 t
   | _ -> raise NoRuleApplies
 
 let rec trace n t =
@@ -106,7 +108,3 @@ let rec trace n t =
       let t' = trace1 t
       in t::(trace (n-1) t')
     with NoRuleApplies -> [t]
-
-
-
- 
