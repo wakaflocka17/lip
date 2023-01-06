@@ -7,7 +7,7 @@ let c1 = "fun s. fun z. s z"
 let c2 = "fun s. fun z. s (s z)"
 let plus = "fun m. fun n. fun s. fun z. m s (n s z)"
 
-let test_removenames = [
+let test_parse = [
   ("fun x. x", DBAbs (DBVar 0));
   ("fun z. z", DBAbs (DBVar 0));
   (c0, DBAbs (DBAbs (DBVar 0)));
@@ -35,16 +35,47 @@ let test_removenames = [
       DBVar 0)))
 ]
 
-
 let%test _ =
   print_newline ();
-  print_endline ("*** Testing removenames...");
+  print_endline ("*** Testing parse...");
   List.fold_left
     (fun b (ts,t) ->
        print_string ts;
-       let b' = (removenames (parse ts) = t) in
+       let b' = (parse ts) = t in
        print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_dbterm t ^ "]"));
        print_newline();
        b && b')
     true
-    test_removenames
+    test_parse
+
+let plusone = "(" ^ plus ^ ") (" ^ c1 ^ ")"
+let c3 = "(" ^ plusone ^ ") (" ^ c2 ^ ")"
+let c4 = "(" ^ plus ^ ") (" ^ c2 ^ ") (" ^ c2 ^ ")"
+
+let test_trace = [
+  ("(fun x. y x z) (fun x. x)",1,"y (fun c. c) z");
+  ("(fun u. fun v. u x) y",10,"fun v. y x");
+  (plusone,1,"fun n. fun s. fun z. (fun s. fun z. s z) s (n s z)");
+  (c3,10,"fun s. fun z. s (s (s z))");
+  (c4,10,"fun s. fun z. s (s (s (s z)))")
+]
+
+let rec last = function
+    [] -> failwith "last on empty list"
+  | [x] -> x
+  | _::l -> last l
+              
+let%test _ =
+  print_newline();
+  print_endline ("*** Testing trace...");  
+  List.fold_left
+    (fun b (ts,n,ts') ->
+       let t = parse ts and t' = parse ts' in
+       let ar = last (trace n t) in (* actual result *)
+       print_string (ts ^ " --" ^ string_of_int n ^ "-> " ^ string_of_dbterm ar);
+       let b' = ar = t' in
+       print_string (" " ^ (if b' then "[OK]" else "[NO : expected " ^ string_of_dbterm t' ^ "]"));
+       print_newline();
+       b && b')
+    true
+    test_trace
