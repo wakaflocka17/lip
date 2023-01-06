@@ -1,10 +1,10 @@
 # De Bruijn Notation
 
-Write an interpreter for the pure untyped lambda calculus that represents internally terms using the de Bruijn notation.
+Write an interpreter for the pure untyped lambda calculus that represents terms internally using the de Bruijn notation.
 
 ## Syntax
 
-The concrete syntax of the language is that of named terms, defined as follows:
+The concrete syntax of the language is that of named terms, whose abstract syntax is defined as follows:
 
 ```ocaml
 type namedterm =
@@ -13,7 +13,8 @@ type namedterm =
   | NamedApp of namedterm * namedterm
 ```
 A [lexer](lib/lexer.mll) and a [parser](lib/parser.mly) are provided for the above abstract syntax.
-Named terms are parsed and converted internally as nameless (or de Bruijn) terms for the purposes of computation. The abstract syntax of nameless terms is the following:
+
+The named AST of a term is converted to its nameless equivalent for the purposes of computation. The conversion may be carried out inside the ```parse``` wrapper. Its output should be a tree of the following type:
 
 ```ocaml
 type dbterm =
@@ -36,7 +37,11 @@ Besides the term to convert, it takes in a naming context for the numbering of f
 Binders are numbered from the inside out, starting from the index 0. 
 For example, in the named term ```λx.λy.x y``` the inner λ is numbered 0 and the outer λ is numbered 1. The bound variables x and y are converted to their binder's index, 1 and 0 respectively:
 ```
+┌─────┐
+↓     |  
 λ. λ. 1 0
+   ↑    | 
+   └────┘
 ```
 
 ## Free variables and naming context
