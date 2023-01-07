@@ -36,12 +36,8 @@ Besides the term to convert, it takes in a naming context for the numbering of f
 
 Binders are numbered from the inside out, starting from the index 0. 
 For example, in the named term ```λx.λy.x y``` the inner λ is numbered 0 and the outer λ is numbered 1. The bound variables x and y are converted to their binder's index, 1 and 0 respectively:
-```
-┌─────┐
-↓     |  
+```p
 λ. λ. 1 0
-   ↑    | 
-   └────┘
 ```
 
 ## Free variables and naming context
@@ -55,7 +51,7 @@ getcontext : namedterm -> int StringMap.t
 ```
 that assigns an incremental, zero-based index to the free variables of a named term in alphabetical order.
 
-Note that when the conversion procedure crosses a λ the indeces returned by the context need to be shifted up by one to avoid being captured. For example, under the context Γ that maps x to 0 and y to 1, the correct representation of  ```λz.y z x ``` would be ```λ.2 0 1 ```, not  ```λ.1 0 0 ```.
+Note that when the conversion procedure crosses a λ the indeces returned by the context need to be shifted up by one to avoid being captured. We can think of the context becoming "one variable longer". For example, under the context Γ that maps x to 0 and y to 1, the correct representation of  ```λz.y z x ``` would be ```λ.2 0 1 ```, not  ```λ.1 0 0 ```.
 
 ## Shifting
 
@@ -98,17 +94,17 @@ The interpretation of the index j in ```[j := s] t``` can be quite confusing. Su
 ```
 this would be wrong, since by the time the bound variable in question is reached, j would not match its index (see by applying the definition!).
 
-j actually stands for the index of the variable to substitute for in the _outer_ context of t. In particular, j = 0 stands for "the free variable numbered 0 outside t's binders". If we want to address one the binders of t directly we need to use a negative index. Each time a λ is entered, this context is shifted up by one, and so is j. This logic leads us to the correct attempt:
+j actually stands for the index of the variable to substitute for in the _outer_ context of t. In particular, ```j = 0``` stands for "the free variable numbered 0 outside of t's binders". If we want to address one the binders of t directly we need to use a negative index. Each time a λ is entered, the context is shifted up by one, and so is j. This logic leads us to the correct attempt:
 ```
 [-1 := 0 1] (λ. λ. 1) = λ. λ. 2 3
 ``` 
 where the free variables of s have been shifted appropriately.
 
-For the purposes of reduction, we are solely concerned with substituting for j = 0.
+For the purposes of reduction, we are solely concerned with substituting for ```j = 0```.
 
 ## β reduction
 
-The β-reduction rule employs substitution. However, in the de Bruijn syntax its application is not as straightforward as it was in the named syntax.
+The way the β-reduction rule employs substitution in the de Bruijn syntax is not as straightforward as it is in the named syntax.
 
 Compare the β reduction rule of named terms, where substitution works on the premise of α conversion:
 ```
@@ -119,13 +115,13 @@ to that of nameless terms:
 (λ.t12) t2 ~> ↑(-1,0) ([0 := ↑(1,0) t2] t12)
 ```
 
-The free variables of the argument are shifted up by one so to ensure the refer to the same names in the context of abstraction's body as they did before.
+The free variables of the argument are shifted up by one to ensure they refer to the same names in the new context of the abstraction body as they did before.
 
-Reducing a redex also "consumes" a binder of the left hand side term, so the result needs to be shifted down by one to ensure its free variables continue to maintain the context invariant of the original redex.
+Reducing a redex also "consumes" the outermost binder of the left hand side term, so the result needs to be shifted down by one to ensure its free variables continue to preserve the context invariant of the original redex.
 
-Define a function ```eval``` that reduces a nameless redex, with type:
+Define a function ```substTop``` that replaces the bound variable of a redex, with type:
 ```ocaml
-eval : dbterm -> dbterm
+substTop : dbterm -> dbterm -> dbterm
 ```
 
 ## Small-step semantics
