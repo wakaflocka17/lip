@@ -14,12 +14,11 @@ let rec free_vars = function
   | NamedApp(t1,t2) -> StringSet.union (free_vars t1) (free_vars t2)
 
 
-let shiftContext d c ctx = StringMap.map
-  (fun v -> if v < c then v else v+d) ctx
+let removenames gamma t =
+  let shiftContext d c ctx = StringMap.map
+    (fun v -> if v < c then v else v+d) ctx
 
-
-let removenames1 gamma t =
-  let rec walk ctx = function
+  in let rec walk ctx = function
     | NamedVar x -> DBVar (StringMap.find x ctx)
     | NamedAbs(x,u) -> DBAbs(walk (StringMap.add x 0 (shiftContext 1 0 ctx)) u)
     | NamedApp(u,v) -> DBApp(walk ctx u, walk ctx v) 
@@ -27,15 +26,14 @@ let removenames1 gamma t =
   in walk gamma t
 
 
-let removenames t =
+let getcontext t =
   let fv = free_vars t in
-
-  let context = mzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
-
-  in removenames1 context t
+  mzip (StringSet.elements fv) (range 0 (StringSet.cardinal fv))
 
 
-let parse (s : string) : dbterm = removenames (parse1 s)
+let parse (s : string) : dbterm =
+  let namedt = parse1 s in
+  removenames (getcontext namedt) namedt
 
 
 let shift d t =
@@ -56,19 +54,18 @@ let subst j s t =
   in walk 0 t
 
 
-let isval = function DBAbs _ -> true | _ -> false
-
 let substTop s t = shift (-1) (subst 0 (shift 1 s) t)
+
 
 exception NoRuleApplies
 
 let rec trace1 = function
-  | DBAbs t -> DBAbs (trace1 t) (* reduce redexes inside abstractions *)
-  | DBApp(DBAbs t12,v2) -> substTop v2 t12
-  | DBApp(v1,t2) when isval v1 -> DBApp(v1,trace1 t2)
+  | DBAbs t -> DBAbs (trace1 t)
+  | DBApp(DBAbs t12,t2) -> substTop t2 t12
   | DBApp(DBVar k,t2) -> DBApp(DBVar k,trace1 t2)
   | DBApp(t1,t2) -> DBApp(trace1 t1,t2)
   | _ -> raise NoRuleApplies
+
 
 let rec trace n t =
   if n<=0 then [t]
