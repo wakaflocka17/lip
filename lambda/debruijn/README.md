@@ -145,7 +145,7 @@ t2 -> t2'
 --------------- [NO-App2]
 t1 t2 -> t1 t2'
 ```
-Define a function trace that performs a given number of reductions according to the above rewriting rules:
+Define a function ```trace``` that performs a given number of reductions according to the above rewriting rules:
 ```ocaml
 trace : int -> dbterm -> dbterm list
 ```
