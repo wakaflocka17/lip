@@ -1,0 +1,2 @@
+open StaticLib.Ast;;
+open StaticLib.Main;;
