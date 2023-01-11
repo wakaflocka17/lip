@@ -24,8 +24,10 @@ and cmd =
   | If of expr * cmd * cmd
   | While of expr * cmd
   | Expr of expr
+  | Decl of decl * cmd
+  | Block of cmd
 
-type decl =
+and decl =
   | EmptyDecl
   | IntVar of ide 
   | Fun of ide * ide * cmd * expr

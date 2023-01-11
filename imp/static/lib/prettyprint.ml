@@ -28,8 +28,10 @@ and string_of_cmd = function
   | If(e,c1,c2) -> "if " ^ string_of_expr e ^ " then " ^ string_of_cmd c1 ^ " else " ^ string_of_cmd c2
   | While(e,c) -> "while " ^ string_of_expr e ^ " do " ^ string_of_cmd c
   | Expr e -> string_of_expr e
+  | Decl(d,c) -> "{ " ^ (let sd = string_of_decl d in if sd="" then "" else sd) ^ string_of_cmd c ^ " }"
+  | Block(c) -> "{ " ^ string_of_cmd c ^ " }"
           
-let rec string_of_decl = function
+and string_of_decl = function
   | EmptyDecl -> ""
   | IntVar(x) -> "int " ^ x
   | Fun(f,x,c,e) -> "fun " ^ f ^ "(" ^ x ^ ") {" ^ string_of_cmd c ^ "return " ^ string_of_expr e ^ "}"
@@ -94,14 +96,16 @@ and vars_of_cmd = function
   | If(e,c1,c2) -> union (vars_of_expr e) (union (vars_of_cmd c1) (vars_of_cmd c2))
   | While(e,c) -> union (vars_of_expr e) (vars_of_cmd c)
   | Expr e -> vars_of_expr e
+  | Decl(d,c) -> union (vars_of_decl d) (vars_of_cmd c)                    
+  | Block(c) -> vars_of_cmd c
 
-let rec vars_of_decl = function
+and vars_of_decl = function
     EmptyDecl -> []
   | IntVar(x) -> [x]
   | Fun(f,x,c,e) -> union [x;f] (union (vars_of_cmd c) (vars_of_expr e))
   | DSeq(d1,d2) -> union (vars_of_decl d1) (vars_of_decl d2)               
 
-let vars_of_prog (Prog(d,_)) = vars_of_decl d
+let vars_of_prog (Prog(d,c)) = union (vars_of_decl d) (vars_of_cmd c)
 
 let string_of_conf vars = function
     St st -> string_of_state st vars

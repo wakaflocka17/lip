@@ -24,6 +24,12 @@ let botmem = fun l -> failwith ("location " ^ string_of_int l ^ " undefined")
     
 let bind f x v = fun y -> if y=x then v else f y
 
+let rec sem_decl (e,l) = function
+    EmptyDecl -> (e,l)
+  | IntVar(x) ->  let e' = bind e x (IVar l) in (e',l+1)
+  | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,c,er)) in (e',l)
+  | DSeq(d1,d2) -> let (e',l') = sem_decl (e,l) d1 in sem_decl (e',l') d2
+  
 let is_val = function
     True -> true
   | False -> true
@@ -89,12 +95,13 @@ and trace1_cmd = function
     | While(e,c) -> Cmd(If(e,Seq(c,While(e,c)),Skip),st)
     | Expr e when is_val e -> St st
     | Expr e -> let (e',st') = trace1_expr st e in Cmd(Expr e',st')
-
-let rec sem_decl (e,l) = function
-    EmptyDecl -> (e,l)
-  | IntVar(x) ->  let e' = bind e x (IVar l) in (e',l+1)
-  | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,c,er)) in (e',l)
-  | DSeq(d1,d2) -> let (e',l') = sem_decl (e,l) d1 in sem_decl (e',l') d2
+    | Decl(d,c) ->
+      let (e,l) = sem_decl (topenv st,getloc st) d in
+      let st' = (e::(getenv st), getmem st, l) in
+      Cmd(Block(c),st')
+    | Block c -> (match trace1_cmd (Cmd(c,st)) with
+          St st -> St (popenv st, getmem st, getloc st)
+        | Cmd(c1',st1) -> Cmd(Block(c1'),st1))
 
 
 let rec trace_rec n t =

@@ -81,6 +81,7 @@ cmd:
   | c1 = cmd; SEQ; c2 = cmd; { Seq(c1,c2) }
   | LPAREN; c = cmd; RPAREN { c }
   | e = expr { Expr e } %prec EXPR
+  | LBRACE; d = decl; c = cmd; RBRACE { Decl(d,c) }
 
 decl:
   | INT; x = ID { IntVar(x) }
