@@ -34,6 +34,8 @@ open Ast
 %token INT
 %token RETURN
 
+%nonassoc RPAREN
+%nonassoc EXPR
 %left SEQ
 %nonassoc ELSE DO
 %left OR
@@ -44,6 +46,9 @@ open Ast
 %left MUL
 
 %start <prog> prog
+%type <decl> decl
+%type <cmd> cmd
+%type <expr> expr 
 
 %%
 
@@ -75,6 +80,7 @@ cmd:
   | x = ID; TAKES; e=expr; { Assign(x,e) }
   | c1 = cmd; SEQ; c2 = cmd; { Seq(c1,c2) }
   | LPAREN; c = cmd; RPAREN { c }
+  | e = expr { Expr e } %prec EXPR
 
 decl:
   | INT; x = ID { IntVar(x) }

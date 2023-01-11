@@ -87,6 +87,8 @@ and trace1_cmd = function
     | If(False,_,c2) -> Cmd(c2,st)
     | If(e,c1,c2) -> let (e',st') = trace1_expr st e in Cmd(If(e',c1,c2),st')
     | While(e,c) -> Cmd(If(e,Seq(c,While(e,c)),Skip),st)
+    | Expr e when is_val e -> St st
+    | Expr e -> let (e',st') = trace1_expr st e in Cmd(Expr e',st')
 
 let rec sem_decl (e,l) = function
     EmptyDecl -> (e,l)

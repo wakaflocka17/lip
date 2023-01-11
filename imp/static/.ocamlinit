@@ -1,2 +1,13 @@
 open StaticLib.Ast;;
 open StaticLib.Main;;
+open StaticLib.Prettyprint;;
+open StaticLib.Types;;
+
+let p1 = "int z;
+fun f(x) {z:=x+1; return 2};
+f(2)
+"
+
+let test_trace s =
+  let ps = parse s in
+  print_string (string_of_trace (vars_of_prog ps) (trace 100 ps));;

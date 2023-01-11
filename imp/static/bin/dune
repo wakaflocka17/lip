@@ -1,4 +1,4 @@
 (executable
  (public_name static)
  (name main)
- (libraries static))
+ (libraries staticLib))

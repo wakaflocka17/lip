@@ -27,6 +27,7 @@ and string_of_cmd = function
   | Seq(c1,c2) -> string_of_cmd c1 ^ "; " ^ string_of_cmd c2
   | If(e,c1,c2) -> "if " ^ string_of_expr e ^ " then " ^ string_of_cmd c1 ^ " else " ^ string_of_cmd c2
   | While(e,c) -> "while " ^ string_of_expr e ^ " do " ^ string_of_cmd c
+  | Expr e -> string_of_expr e
           
 let rec string_of_decl = function
   | EmptyDecl -> ""
@@ -92,6 +93,7 @@ and vars_of_cmd = function
   | Seq(c1,c2) -> union (vars_of_cmd c1) (vars_of_cmd c2)
   | If(e,c1,c2) -> union (vars_of_expr e) (union (vars_of_cmd c1) (vars_of_cmd c2))
   | While(e,c) -> union (vars_of_expr e) (vars_of_cmd c)
+  | Expr e -> vars_of_expr e
 
 let rec vars_of_decl = function
     EmptyDecl -> []
