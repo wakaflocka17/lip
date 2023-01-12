@@ -34,10 +34,9 @@ open Ast
 %token INT
 %token RETURN
 
-%nonassoc RPAREN
-%nonassoc EXPR
-%left SEQ
-%nonassoc ELSE DO
+%nonassoc SKIP LBRACE ID CONST TRUE FALSE INT FUN LPAREN WHILE IF ELSE DO (* tokens a command can start with *)
+%left CMDSEQ DECLSEQ (* sequeqnces associate to the left *)
+
 %left OR
 %left AND
 %nonassoc NOT
@@ -53,6 +52,7 @@ open Ast
 %%
 
 prog:
+  | c = cmd; EOF { Prog(EmptyDecl,c) }
   | d = decl; c = cmd; EOF { Prog(d,c) }
 ;
 
@@ -74,17 +74,16 @@ expr:
 ;
 
 cmd:
-  | SKIP { Skip }
+  | SKIP; SEQ { Skip }
   | IF; e0 = expr; THEN; c1 = cmd; ELSE; c2 = cmd; { If(e0,c1,c2) }
   | WHILE; e = expr; DO; c = cmd; { While(e,c) }
-  | x = ID; TAKES; e=expr; { Assign(x,e) }
-  | c1 = cmd; SEQ; c2 = cmd; { Seq(c1,c2) }
+  | x = ID; TAKES; e=expr; SEQ { Assign(x,e) }
+  | c1 = cmd; c2 = cmd; { Seq(c1,c2) } %prec CMDSEQ
   | LPAREN; c = cmd; RPAREN { c }
-  | e = expr { Expr e } %prec EXPR
+  | e = expr; SEQ { Expr e }
   | LBRACE; d = decl; c = cmd; RBRACE { Decl(d,c) }
 
 decl:
-  | INT; x = ID { IntVar(x) }
-  | FUN; f = ID; LPAREN; x = ID; RPAREN; LBRACE; c = cmd; SEQ; RETURN; e = expr; RBRACE { Fun(f,x,c,e) }
-  | d1 = decl; SEQ; d2 = decl { DSeq(d1,d2) } 
-  | { EmptyDecl }
+  | INT; x = ID; SEQ { IntVar(x) }
+  | FUN; f = ID; LPAREN; x = ID; RPAREN; LBRACE; c = cmd; RETURN; e = expr; RBRACE { Fun(f,x,c,e) }
+  | d1 = decl; d2 = decl { DSeq(d1,d2) } %prec DECLSEQ
