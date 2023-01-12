@@ -34,6 +34,12 @@ let p3 = "{
   }
 }";;
 
+let p4 = "int n;
+fun f(x) {skip; return n+x};
+fun g(n) {skip; return f(n)}
+n:=1;
+g(10)"
+
 let test_trace s =
   let ps = parse s in
   print_string (string_of_trace (vars_of_prog ps) (trace 100 ps));;

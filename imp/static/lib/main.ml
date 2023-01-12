@@ -27,7 +27,12 @@ let bind f x v = fun y -> if y=x then v else f y
 let rec sem_decl (e,l) = function
     EmptyDecl -> (e,l)
   | IntVar(x) ->  let e' = bind e x (IVar l) in (e',l+1)
-  | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,c,er)) in (e',l)
+  (* When declaring a function, we bind its identifier with a closure in the
+     environment being constructed. The closure is a data structure that
+     contains, along with the code of the function, the environment constructed 
+     so far on top of the previous declarations and that inherited from the
+     enclosing scopes. *)
+  | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,e,c,er)) in (e',l)
   | DSeq(d1,d2) -> let (e',l') = sem_decl (e,l) d1 in sem_decl (e',l') d2
   
 let is_val = function
@@ -63,9 +68,14 @@ let rec trace1_expr st = function
   | Leq(Const(n1),e2) -> let (e2',st') = trace1_expr st e2 in (Leq(Const(n1),e2'),st')
   | Leq(e1,e2) -> let (e1',st') = trace1_expr st e1 in (Leq(e1',e2),st')
   | Call(f,Const(n)) -> (match (topenv st) f with
-        IFun(x,c,er) ->
+        IFun(x,staticenv,c,er) ->
         let l = getloc st in
-        let env' = bind (topenv st) x (IVar l) in
+        (* The environment in which the references contained in the function's
+           body are going to be evaluated in is that determined by its lexical
+           position in the code. This environment can be retrieved from the
+           function's associated closure, and is pushed onto the environment
+           stack as soon as the function is called. *)
+        let env' = bind staticenv x (IVar l) in
         let mem' = bind (getmem st) l n in
         let st' = (env'::(getenv st), mem', l+1) in
         (CallExec(c,er),st')

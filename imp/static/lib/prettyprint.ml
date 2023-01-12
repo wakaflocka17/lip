@@ -39,7 +39,7 @@ and string_of_decl = function
 
 let string_of_env1 s x = match topenv s x with
   | IVar l -> string_of_int l ^ "/" ^ x
-  | IFun(y,c,e) -> "fun(" ^ y ^ "){" ^ string_of_cmd c ^ "; return " ^ string_of_expr e ^ "}/" ^ x
+  | IFun(y,_,c,e) -> "<fun(" ^ y ^ "){" ^ string_of_cmd c ^ "; return " ^ string_of_expr e ^ "}/" ^ x
     
 let rec string_of_env s = function
     [] -> ""
@@ -60,7 +60,7 @@ let rec getlocs e = function
     [] -> []
   | x::dom -> try (match e x with
     | IVar l -> l::(getlocs e dom)
-    | IFun(_,_,_) -> [])
+    | IFun(_,_,_,_) -> [])
     with _ -> getlocs e dom
                    
 let string_of_state st dom =

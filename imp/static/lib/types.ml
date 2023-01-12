@@ -2,11 +2,14 @@ open Ast
     
 type loc = int
 
-type envval = IVar of loc | IFun of ide * cmd * expr
 type memval = int
-
-type env = ide -> envval
 type mem = loc -> memval
+
+(* The second parameter of the IFun constructor is an environment: in static
+scoping functions evaluate to closures, that is, the text of the function
+together with environment at the point of declaration *)
+type env = ide -> envval
+and envval = IVar of loc | IFun of ide * env * cmd * expr
 
 (* The third component of the state is the first free location.
    We assume that the store is unbounded *)
