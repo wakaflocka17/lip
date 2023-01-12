@@ -35,8 +35,8 @@ let p3 = "{
 }";;
 
 let p4 = "int n;
-fun f(x) {skip; return n+x}
-fun g(n) {skip; return f(n)}
+fun f(x) {return n+x}
+fun g(n) {return f(n)}
 n:=1;
 g(10);"
 

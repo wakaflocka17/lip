@@ -34,8 +34,9 @@ open Ast
 %token INT
 %token RETURN
 
-%nonassoc SKIP LBRACE ID CONST TRUE FALSE INT FUN LPAREN WHILE IF ELSE DO (* tokens a command can start with *)
-%left CMDSEQ DECLSEQ (* sequeqnces associate to the left *)
+(* sequences are reduced eagerly *)
+%nonassoc SKIP LBRACE ID CONST TRUE FALSE INT FUN LPAREN WHILE IF ELSE DO
+%nonassoc CMDSEQ DECLSEQ
 
 %left OR
 %left AND
@@ -85,5 +86,6 @@ cmd:
 
 decl:
   | INT; x = ID; SEQ { IntVar(x) }
+  | FUN; f = ID; LPAREN; x = ID; RPAREN; LBRACE; RETURN; e = expr; RBRACE { Fun(f,x,Skip,e) } (* function with return expr only *)
   | FUN; f = ID; LPAREN; x = ID; RPAREN; LBRACE; c = cmd; RETURN; e = expr; RBRACE { Fun(f,x,c,e) }
   | d1 = decl; d2 = decl { DSeq(d1,d2) } %prec DECLSEQ
