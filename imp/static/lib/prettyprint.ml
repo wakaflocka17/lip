@@ -18,34 +18,38 @@ let rec string_of_expr = function
   | Eq(e1,e2) -> string_of_expr e1 ^ "=" ^ string_of_expr e2
   | Leq(e1,e2) -> string_of_expr e1 ^ "<=" ^ string_of_expr e2
   | Call(f,e) -> f ^ "(" ^ string_of_expr e ^ ")"
-  | CallExec(c,e) -> "exec{" ^ string_of_cmd c ^ "; ret " ^ string_of_expr e ^ "}"
+  | CallExec(c,e) -> "exec{" ^ string_of_cmd c ^ " ret " ^ string_of_expr e ^ "}"
   | CallRet(e) -> "{ret " ^ string_of_expr e ^ "}"
 
 and string_of_cmd = function
-    Skip -> "skip"
-  | Assign(x,e) -> x ^ ":=" ^ string_of_expr e
-  | Seq(c1,c2) -> string_of_cmd c1 ^ "; " ^ string_of_cmd c2
+    Skip -> "skip" ^ ";"
+  | Assign(x,e) -> x ^ ":=" ^ string_of_expr e ^ ";"
+  | Seq(c1,c2) -> string_of_cmd c1 ^ " " ^ string_of_cmd c2
   | If(e,c1,c2) -> "if " ^ string_of_expr e ^ " then " ^ string_of_cmd c1 ^ " else " ^ string_of_cmd c2
   | While(e,c) -> "while " ^ string_of_expr e ^ " do " ^ string_of_cmd c
-  | Expr e -> string_of_expr e
-  | Decl(d,c) -> "{ " ^ (let sd = string_of_decl d in if sd="" then "" else sd) ^ string_of_cmd c ^ " }"
+  | Expr e -> string_of_expr e ^ ";"
+  | Decl(d,c) -> "{ " ^ (let sd = string_of_decl d in if sd="" then "" else sd ^ " ") ^ string_of_cmd c ^ " }"
   | Block(c) -> "{ " ^ string_of_cmd c ^ " }"
           
 and string_of_decl = function
   | EmptyDecl -> ""
-  | IntVar(x) -> "int " ^ x
-  | Fun(f,x,c,e) -> "fun " ^ f ^ "(" ^ x ^ ") {" ^ string_of_cmd c ^ "return " ^ string_of_expr e ^ "}"
-  | DSeq(d1,d2) -> string_of_decl d1 ^ ";" ^ string_of_decl d2
+  | IntVar(x) -> "int " ^ x ^ ";"
+  | Fun(f,x,c,e) -> "fun " ^ f ^ "(" ^ x ^ ") {" ^ string_of_cmd c ^ " return " ^ string_of_expr e ^ "}"
+  | DSeq(d1,d2) -> string_of_decl d1 ^ " " ^ string_of_decl d2
 
 let string_of_env1 s x = match topenv s x with
   | IVar l -> string_of_int l ^ "/" ^ x
-  | IFun(y,_,c,e) -> "<fun(" ^ y ^ "){" ^ string_of_cmd c ^ "; return " ^ string_of_expr e ^ "}/" ^ x
+  | IFun(_,_,_,_) -> "<fun>/" ^ x
     
-let rec string_of_env s = function
+let string_of_env (s : state) vars =
+  let env = topenv s in
+  let dom = List.filter (fun x -> try let _ = env x in true with _ -> false) vars in
+  let rec helper = function
     [] -> ""
-  | [x] -> (try string_of_env1 s x with _ -> "")
-  | x::dom' -> (try string_of_env1 s x ^ "," ^ string_of_env s dom'
-                with _ -> string_of_env s dom')
+  | [x] -> string_of_env1 s x
+  | x::dom' -> string_of_env1 s x ^ "," ^ helper dom'
+
+  in helper dom
 
 let string_of_mem1 (m,l) i =
   assert (i<l);
@@ -54,7 +58,15 @@ let string_of_mem1 (m,l) i =
 let rec range a b = if b<a then [] else a::(range (a+1) b);;
 
 let string_of_mem (m,l) =
-  List.fold_left (fun str i -> str ^ (try string_of_mem1 (m,l) i ^ "," with _ -> "")) "" (range 0 (l - 1))
+  let locs = range 0 (l - 1) in
+  let dom = List.filter (fun loc -> try let _ = m loc in true with _ -> false) locs in
+  let rec helper = function
+    [] -> ""
+  | [i] -> string_of_mem1 (m,l) i
+  | i::dom' -> string_of_mem1 (m,l) i ^ "," ^ helper dom'
+
+  in helper dom
+
 
 let rec getlocs e = function
     [] -> []
