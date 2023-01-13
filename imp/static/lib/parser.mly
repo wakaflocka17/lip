@@ -35,7 +35,7 @@ open Ast
 %token RETURN
 
 (* sequences are reduced eagerly *)
-%nonassoc SKIP LBRACE ID CONST TRUE FALSE INT FUN LPAREN WHILE IF ELSE DO
+%left SKIP LBRACE ID CONST TRUE FALSE INT FUN LPAREN WHILE IF ELSE DO
 %nonassoc CMDSEQ DECLSEQ
 
 %left OR
