@@ -40,6 +40,11 @@ fun g(n) {return f(n)}
 n:=1;
 g(10);"
 
+let p5 = "int x;
+int r;
+fun f(n) { if n=0 then r:=1; else r:=n*f(n-1); return r }
+x := f(5);";;
+
 let test_trace s =
   let ps = parse s in
   print_string (string_of_trace (vars_of_prog ps) (trace 100 ps));;

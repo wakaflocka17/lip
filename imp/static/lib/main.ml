@@ -68,16 +68,18 @@ let rec trace1_expr st = function
   | Leq(Const(n1),e2) -> let (e2',st') = trace1_expr st e2 in (Leq(Const(n1),e2'),st')
   | Leq(e1,e2) -> let (e1',st') = trace1_expr st e1 in (Leq(e1',e2),st')
   | Call(f,Const(n)) -> (match (topenv st) f with
-        IFun(x,staticenv,c,er) ->
+        IFun(x,staticenv,c,er) as funval ->
         let l = getloc st in
-        (* The environment in which the references contained in the function's
+        (* The environment in which the nonlocal references of the function's
            body are going to be evaluated in is that determined by its lexical
            position in the code. This environment can be retrieved from the
            function's associated closure, and is pushed onto the environment
            stack as soon as the function is called. *)
         let env' = bind staticenv x (IVar l) in
+        (* To allow recursion, add f itself to its runtime environment *)
+        let recenv = bind env' f funval in
         let mem' = bind (getmem st) l n in
-        let st' = (env'::(getenv st), mem', l+1) in
+        let st' = (recenv::(getenv st), mem', l+1) in
         (CallExec(c,er),st')
       | _ -> raise (TypeError "Call of a non-function"))
   | Call(f,e) -> let (e',st') = trace1_expr st e in (Call(f,e'),st')
