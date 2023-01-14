@@ -27,10 +27,15 @@ let bind f x v = fun y -> if y=x then v else f y
 let rec sem_decl (e,l) = function
     EmptyDecl -> (e,l)
   | IntVar(x) ->  let e' = bind e x (IVar l) in (e',l+1)
+
+  (******************************************************************************)
   (* A function identifier is bound to a closure in the new environment. 
      The closure contains the code of the function and the environment available
      at the time of its declaration and other information *)
+     
   | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,e,c,er)) in (e',l)
+  (******************************************************************************)
+
   | DSeq(d1,d2) -> let (e',l') = sem_decl (e,l) d1 in sem_decl (e',l') d2
   
 let is_val = function
@@ -69,12 +74,15 @@ let rec trace1_expr st = function
         IFun(x,staticenv,c,er) as funval ->
         let l = getloc st in
 
+        (******************************************************************************)
         (* Use the function's lexical environment retrieved from its closure 
            to construct its runtime environment. We add the bindings of its 
            formal parameter and to the function itself - allowing recursion - 
            before pushing it onto the stack. *)
+
         let env' = bind staticenv x (IVar l) in
         let recenv = bind env' f funval in
+        (******************************************************************************)
 
         let mem' = bind (getmem st) l n in
         let st' = (recenv::(getenv st), mem', l+1) in
