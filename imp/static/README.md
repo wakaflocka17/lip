@@ -72,7 +72,7 @@ This can be accomplished by associating a **closure** to each function identifie
 Take the following valid code for example:
 ```
 int x;
-fun f(n) { return x + y + n }
+fun f(n) { return x+n }
 int y;
 fun g(m) { y := f(m); return y }
 
@@ -90,8 +90,8 @@ and envval = IVar of loc | IFun of ide * env * cmd * expr
 ## Small-step semantics
 
 Implement the small-step semantics under the static scoping rule. You will need to:
-* Modify the semantics of declarations to create a closure when a function declaration is processed
-* Modify the semantics of the call expression to retrieve a function's associated closure on top of which build a runtime environment to push onto the environment stack
+* Modify the semantics of declarations to create a closure when processing a function declaration
+* Modify the semantics of the call expression to retrieve a function's associated closure and push it onto the environment stack
 
 Take this piece of code for example:
 ```
