@@ -5,9 +5,8 @@ type loc = int
 type memval = int
 type mem = loc -> memval
 
-(* The second parameter of the IFun constructor is an environment: in static
-scoping functions evaluate to closures, that is, the text of the function
-together with environment at the point of declaration *)
+(* The second component of the IFun constructor holds the environment at the
+   time of declaration of a function *)
 type env = ide -> envval
 and envval = IVar of loc | IFun of ide * env * cmd * expr
 

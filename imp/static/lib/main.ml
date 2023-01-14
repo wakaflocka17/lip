@@ -27,11 +27,9 @@ let bind f x v = fun y -> if y=x then v else f y
 let rec sem_decl (e,l) = function
     EmptyDecl -> (e,l)
   | IntVar(x) ->  let e' = bind e x (IVar l) in (e',l+1)
-  (* When declaring a function, we bind its identifier with a closure in the
-     environment being constructed. The closure is a data structure that
-     contains, along with the code of the function, the environment constructed 
-     so far on top of the previous declarations and that inherited from the
-     enclosing scopes. *)
+  (* A function identifier is bound to a closure in the new environment. 
+     The closure contains the code of the function and the environment available
+     at the time of its declaration and other information *)
   | Fun(f,x,c,er) -> let e' = bind e f (IFun(x,e,c,er)) in (e',l)
   | DSeq(d1,d2) -> let (e',l') = sem_decl (e,l) d1 in sem_decl (e',l') d2
   
@@ -70,14 +68,14 @@ let rec trace1_expr st = function
   | Call(f,Const(n)) -> (match (topenv st) f with
         IFun(x,staticenv,c,er) as funval ->
         let l = getloc st in
-        (* The environment in which the nonlocal references of the function's
-           body are going to be evaluated in is that determined by its lexical
-           position in the code. This environment can be retrieved from the
-           function's associated closure, and is pushed onto the environment
-           stack as soon as the function is called. *)
+
+        (* Use the function's lexical environment retrieved from its closure 
+           to construct its runtime environment. We add the bindings of its 
+           formal parameter and to the function itself - allowing recursion - 
+           before pushing it onto the stack. *)
         let env' = bind staticenv x (IVar l) in
-        (* To allow recursion, add f itself to its runtime environment *)
         let recenv = bind env' f funval in
+
         let mem' = bind (getmem st) l n in
         let st' = (recenv::(getenv st), mem', l+1) in
         (CallExec(c,er),st')
